@@ -58,7 +58,7 @@ const TaskForm = (props) => {
           freeSolo
           options={top100Films.map((option) => option.title)}
           value={enteredType}
-          onChange={typeChangeHandler}
+          onInputChange={typeChangeHandler}
           renderInput={(params) => (
             <TextField
               {...params}

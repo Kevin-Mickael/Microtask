@@ -93,11 +93,52 @@ const Tasks = () => {
     // });
   };
 
-  const deleteItemHandler = (taskId) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
-      return updatedTasks;
-    });
+  const deleteTaskHandler = (taskId) => {
+    axios
+      .delete(`${config.baseUrl}/tasks/${taskId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+
+        setTasks((prevTasks) => {
+          const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
+          return updatedTasks;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateTaskHandler = (taskId, taskData) => {
+    axios
+      .put(`${config.baseUrl}/tasks/${taskId}`, taskData, {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+
+        setTasks((prevTasks) => {
+          const updatedTasks = prevTasks.map((task) => {
+            if (task.id === taskId) {
+              return { ...task, ...taskData };
+            } else {
+              return task;
+            }
+          });
+          return updatedTasks;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   let content = (
@@ -107,7 +148,13 @@ const Tasks = () => {
   );
 
   if (tasks.length > 0) {
-    content = <TasksList items={tasks} onDeleteItem={deleteItemHandler} />;
+    content = (
+      <TasksList
+        items={tasks}
+        onDeleteItem={deleteTaskHandler}
+        onUpdateItem={updateTaskHandler}
+      />
+    );
   }
 
   if (error) {
