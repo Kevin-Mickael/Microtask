@@ -43,7 +43,7 @@ const Login = () => {
 
         setTimeout(() => {
           history.push("/dashboard");
-        }, 3000);
+        }, 2000);
 
         e.target.reset();
       })
