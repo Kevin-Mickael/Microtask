@@ -10,9 +10,13 @@ const NewTask = (props) => {
     props.onAddTask(taskData);
   };
 
+  // const deleteTypeDataHandler = (enteredTypeData) => {
+  //   props.onDeleteType(enteredTypeData);
+  // };
+
   return (
     <div>
-      <TaskForm onSaveTaskData={saveTaskDataHandler}/>
+      <TaskForm onSaveTaskData={saveTaskDataHandler} types={props.types} onAddType={props.onAddType} onDeleteTypeData={props.onDeleteType} />
     </div>
   );
 };

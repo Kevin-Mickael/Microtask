@@ -17,6 +17,7 @@ const TasksList = (props) => {
             count={task.count}
             onDelete={props.onDeleteItem}
             onUpdate={props.onUpdateItem}
+            types={props.types}
           />
         ))}
       </List>

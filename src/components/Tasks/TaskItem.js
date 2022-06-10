@@ -38,6 +38,7 @@ const TaskItem = (props) => {
           count={props.count}
           onUpdate={props.onUpdate}
           onClose={closeHandler}
+          types={props.types}
         />
       ) : (
         <>
@@ -52,15 +53,17 @@ const TaskItem = (props) => {
           </Typography>
           <Button
             type="button"
-            sx={{ color: "indigo", minWidth: "24px" }}
+            color="secondary"
+            sx={{ minWidth: "24px" }}
             onClick={editHandler}
           >
             <EditIcon />
           </Button>
           <Button
             type="button"
+            color="secondary"
             onClick={deleteHandler}
-            sx={{ color: "red", minWidth: "24px" }}
+            sx={{ minWidth: "24px" }}
           >
             <DeleteForeverIcon />
           </Button>

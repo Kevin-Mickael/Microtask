@@ -9,44 +9,77 @@ const axios = require("axios");
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
+  const [types, setTypes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getTasksHandler = useCallback(() => {
+  const getDataHandler = useCallback(() => {
     setIsLoading(true);
     setError(null);
 
+    const requestTasks = axios.get(`${config.baseUrl}/tasks`, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+
+    const requestTypes = axios.get(`${config.baseUrl}/types`, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+
     axios
-      .get(`${config.baseUrl}/tasks`, {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
+      .all([requestTasks, requestTypes])
+      .then(
+        axios.spread((TasksResponse, TypesResponse) => {
+          console.log(TasksResponse.data, TypesResponse.data);
 
-        const data = response.data;
-        const loadedTasks = [];
+          // Handle TasksResponse
+          console.log(TasksResponse.data);
 
-        for (const key in data) {
-          loadedTasks.push({
-            id: data[key]._id,
-            date: data[key].date,
-            type: data[key].type,
-            minute: data[key].minute,
-            second: data[key].second,
-            count: data[key].count,
+          const tasksData = TasksResponse.data;
+          const loadedTasks = [];
+
+          for (const key in tasksData) {
+            loadedTasks.push({
+              id: tasksData[key]._id,
+              date: tasksData[key].date,
+              type: tasksData[key].type,
+              minute: tasksData[key].minute,
+              second: tasksData[key].second,
+              count: tasksData[key].count,
+            });
+          }
+
+          // Sort by date in reverse order
+          loadedTasks.reverse((a, b) => {
+            return new Date(a.date) - new Date(b.date);
           });
-        }
 
-        // Sort by date in reverse order
-        loadedTasks.reverse((a, b) => {
-          return new Date(a.date) - new Date(b.date);
-        });
+          setTasks(loadedTasks);
 
-        setTasks(loadedTasks);
-      })
+          // Handle TypesResponse
+          console.log(TypesResponse.data);
+
+          const typesData = TypesResponse.data;
+          const loadedTypes = [];
+
+          for (const key in typesData) {
+            loadedTypes.push({
+              id: typesData[key]._id,
+              type: typesData[key].type,
+            });
+          }
+
+          // Sort by type
+          loadedTypes.sort((a,b) => (a.type > b.type ? 1: -1));
+
+          setTypes(loadedTypes);
+        })
+      )
       .catch((error) => {
         console.log(error.message);
         setError(error.message);
@@ -56,8 +89,8 @@ const Tasks = () => {
   }, []);
 
   useEffect(() => {
-    getTasksHandler();
-  }, [getTasksHandler]);
+    getDataHandler();
+  }, [getDataHandler]);
 
   const addTaskHandler = (task) => {
     axios
@@ -87,10 +120,39 @@ const Tasks = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
 
-    // setTasks((prevTasks) => {
-    //   return [task, ...prevTasks];
-    // });
+  const addTypeHandler = (type) => {
+    axios
+      .post(`${config.baseUrl}/types`, type, {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+
+        setTypes((prevTypes) => {
+          const newTypes = 
+          [
+            {
+              id: response.data._id,
+              type: response.data.type,
+            },
+            ...prevTypes,
+          ];
+          console.log(newTypes);
+          // Sort by string
+          newTypes.sort((a,b) => (a.type > b.type ? 1: -1));
+          console.log(newTypes);
+
+          return newTypes;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const deleteTaskHandler = (taskId) => {
@@ -107,6 +169,31 @@ const Tasks = () => {
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
           return updatedTasks;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteTypeHandler = (type) => {
+    axios
+      .delete(`${config.baseUrl}/types`, {
+        data: {
+          type: type,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+
+        setTypes((prevTypes) => {
+          const updatedTypes = prevTypes.filter((item) => item.type !== type);
+          console.log(updatedTypes);
+          return updatedTypes;
         });
       })
       .catch((error) => {
@@ -151,6 +238,7 @@ const Tasks = () => {
     content = (
       <TasksList
         items={tasks}
+        types={types}
         onDeleteItem={deleteTaskHandler}
         onUpdateItem={updateTaskHandler}
       />
@@ -175,7 +263,12 @@ const Tasks = () => {
 
   return (
     <div>
-      <NewTask onAddTask={addTaskHandler} />
+      <NewTask
+        onAddTask={addTaskHandler}
+        types={types}
+        onAddType={addTypeHandler}
+        onDeleteType={deleteTypeHandler}
+      />
       <TasksSummary items={tasks} />
 
       {content}
