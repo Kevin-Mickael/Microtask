@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Chart from "./Chart";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 const TasksSummary = (props) => {
   let sumTasks = 0;
@@ -41,20 +42,27 @@ const TasksSummary = (props) => {
           </Grid>
 
           <Grid item xs={12} md={2}>
-          <Stack direction="column" spacing={2}>
-            <TasksFilter
-              label="Start date"
-              selected={props.filteredStartDate}
-              onChangeFilter={props.onFilterStartDateChange}
-            />
-            <TasksFilter
-              label="End date"
-              selected={props.filteredEndDate}
-              onChangeFilter={props.onFilterEndDateChange}
-            />
+            <Stack direction="column" spacing={2}>
+              <TasksFilter
+                label="Start date"
+                selected={props.filteredStartDate}
+                onChangeFilter={props.onFilterStartDateChange}
+              />
+              <TasksFilter
+                label="End date"
+                selected={props.filteredEndDate}
+                onChangeFilter={props.onFilterEndDateChange}
+              />
+              <Button
+                disableElevation
+                variant="contained"
+                onClick={props.onDeleteAll}
+                sx={{ color: "white", borderRadius: 0 }}
+              >
+                Delete All
+              </Button>
             </Stack>
           </Grid>
-
         </Grid>
       </Box>
       <Divider />

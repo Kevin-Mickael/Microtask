@@ -35,8 +35,8 @@ const Tasks = () => {
   const filteredTasks = tasks.filter((task) => {
     // Convert input dates to UTC as dates in database are stored as UTC dates
     const offset = moment().utcOffset();
-    const start = moment(filteredStartDate).utcOffset(offset);
-    const end = moment(filteredEndDate).utcOffset(offset).add(1, "days");
+    const start = moment(filteredStartDate, "MM/DD/YYYY").utcOffset(offset);
+    const end = moment(filteredEndDate, "MM/DD/YYYY").utcOffset(offset).add(1, "days");
 
     return moment(task.date) >= start && moment(task.date) < end;
   });
@@ -255,6 +255,24 @@ const Tasks = () => {
       });
   };
 
+  const deleteAllHandler = (prevState) => {
+    axios
+      .delete(`${config.baseUrl}/tasks/`, {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+
+        setTasks((prevState = []));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   let content = (
     <Typography variant="h2" align="center">
       No tasks found.
@@ -298,6 +316,7 @@ const Tasks = () => {
       />
       <TasksSummary
         items={filteredTasks}
+        onDeleteAll={deleteAllHandler}
         filteredStartDate={filteredStartDate}
         filteredEndDate={filteredEndDate}
         onFilterStartDateChange={filterStartDateChangeHandler}
