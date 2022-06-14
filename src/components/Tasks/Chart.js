@@ -22,6 +22,7 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
@@ -45,17 +46,22 @@ export const options = {
 };
 
 const Chart = (props) => {
+  // Sort tasks by date
+  // .slice(0) copies the array
+  const sortedTasks = props.items.slice(0).sort((a, b) => {
+    return moment(a.date) > moment(b.date) ? 1 : -1;
+  });
+
   // Get all dates from items
   let taskDates = [];
-  props.items.map((task) => {
-    return taskDates.push(moment(task.date).format("YYYYMMDD"));
+  sortedTasks.map((task) => {
+    return taskDates.push(moment.utc(task.date).local().format("YYYYMMDD"));
   });
   // Remove duplicates
   taskDates = [...new Set(taskDates)];
-  // Sort array
+  // Display maximum 7 days' data
   taskDates.reverse();
-  // Display a week's data only
-  taskDates = taskDates.slice(0,6);
+  taskDates = taskDates.slice(0, 7);
   taskDates.sort();
 
   // Reformat dates
@@ -66,10 +72,8 @@ const Chart = (props) => {
         parseInt(d.substring(4, 6)) - 1,
         d.substring(6, 9)
       )
-    ).format("MMM DD, YYYY");
+    ).format("MMM DD, YYYY (ddd)");
   });
-
-  // console.log(taskDates);
 
   const labels = taskDates;
 
@@ -83,7 +87,9 @@ const Chart = (props) => {
           let sumHours = 0;
 
           for (let i = 0; i < props.items.length; i++) {
-            if (l === moment(props.items[i].date).format("MMM DD, YYYY")) {
+            if (
+              l === moment(props.items[i].date).format("MMM DD, YYYY (ddd)")
+            ) {
               sumMinutes +=
                 parseInt(props.items[i].minute) *
                 parseInt(props.items[i].count);
@@ -97,13 +103,14 @@ const Chart = (props) => {
           return sumHours;
         }),
         backgroundColor: "#827717",
+        maxBarThickness: 100,
       },
     ],
   };
 
   console.log(props.items);
 
-  return <Bar options={options} data={data} />;
+  return <Bar height="200px" options={options} data={data} />;
 };
 
 export default Chart;

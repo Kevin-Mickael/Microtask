@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import moment from "moment";
 import NewTask from "../NewTask/NewTask";
 import TasksList from "./TasksList";
 import TasksSummary from "./TasksSummary";
@@ -12,6 +13,33 @@ const Tasks = () => {
   const [types, setTypes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  // Local date
+  const [filteredStartDate, setFilteredStartDate] = useState(
+    new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate() - 6
+    ).toLocaleDateString()
+  );
+  const [filteredEndDate, setFilteredEndDate] = useState(
+    new Date().toLocaleDateString()
+  );
+
+  const filterStartDateChangeHandler = (selected) => {
+    setFilteredStartDate(selected);
+  };
+  const filterEndDateChangeHandler = (selected) => {
+    setFilteredEndDate(selected);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    // Convert input dates to UTC as dates in database are stored as UTC dates
+    const offset = moment().utcOffset();
+    const start = moment(filteredStartDate).utcOffset(offset);
+    const end = moment(filteredEndDate).utcOffset(offset).add(1, "days");
+
+    return moment(task.date) >= start && moment(task.date) < end;
+  });
 
   const getDataHandler = useCallback(() => {
     setIsLoading(true);
@@ -75,7 +103,7 @@ const Tasks = () => {
           }
 
           // Sort by type
-          loadedTypes.sort((a,b) => (a.type > b.type ? 1: -1));
+          loadedTypes.sort((a, b) => (a.type > b.type ? 1 : -1));
 
           setTypes(loadedTypes);
         })
@@ -134,8 +162,7 @@ const Tasks = () => {
         console.log(response);
 
         setTypes((prevTypes) => {
-          const newTypes = 
-          [
+          const newTypes = [
             {
               id: response.data._id,
               type: response.data.type,
@@ -144,7 +171,7 @@ const Tasks = () => {
           ];
           console.log(newTypes);
           // Sort by string
-          newTypes.sort((a,b) => (a.type > b.type ? 1: -1));
+          newTypes.sort((a, b) => (a.type > b.type ? 1 : -1));
           console.log(newTypes);
 
           return newTypes;
@@ -237,7 +264,7 @@ const Tasks = () => {
   if (tasks.length > 0) {
     content = (
       <TasksList
-        items={tasks}
+        items={filteredTasks}
         types={types}
         onDeleteItem={deleteTaskHandler}
         onUpdateItem={updateTaskHandler}
@@ -269,7 +296,13 @@ const Tasks = () => {
         onAddType={addTypeHandler}
         onDeleteType={deleteTypeHandler}
       />
-      <TasksSummary items={tasks} />
+      <TasksSummary
+        items={filteredTasks}
+        filteredStartDate={filteredStartDate}
+        filteredEndDate={filteredEndDate}
+        onFilterStartDateChange={filterStartDateChangeHandler}
+        onFilterEndDateChange={filterEndDateChangeHandler}
+      />
 
       {content}
     </div>

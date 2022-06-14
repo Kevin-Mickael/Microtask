@@ -1,9 +1,11 @@
 import React from "react";
+import TasksFilter from "./TasksFilter";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Chart from "./Chart";
+import Stack from "@mui/material/Stack";
 
 const TasksSummary = (props) => {
   let sumTasks = 0;
@@ -25,7 +27,7 @@ const TasksSummary = (props) => {
     <>
       <Box sx={{ flexGrow: 1, m: 2 }}>
         <Grid container spacing={2}>
-          <Grid item>
+          <Grid item xs={12} md={2}>
             <Typography variant="body1" component="div">
               {`Total tasks: ${sumTasks}`}
             </Typography>
@@ -33,9 +35,26 @@ const TasksSummary = (props) => {
               {`Total hours: ${sumHours.toFixed(2)}`}
             </Typography>
           </Grid>
-          <Grid item>
+
+          <Grid item xs={12} md={8}>
             <Chart items={props.items} />
           </Grid>
+
+          <Grid item xs={12} md={2}>
+          <Stack direction="column" spacing={2}>
+            <TasksFilter
+              label="Start date"
+              selected={props.filteredStartDate}
+              onChangeFilter={props.onFilterStartDateChange}
+            />
+            <TasksFilter
+              label="End date"
+              selected={props.filteredEndDate}
+              onChangeFilter={props.onFilterEndDateChange}
+            />
+            </Stack>
+          </Grid>
+
         </Grid>
       </Box>
       <Divider />
