@@ -3,6 +3,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Chart from "./Chart";
 
 const TasksSummary = (props) => {
   let sumTasks = 0;
@@ -24,13 +25,16 @@ const TasksSummary = (props) => {
     <>
       <Box sx={{ flexGrow: 1, m: 2 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item>
             <Typography variant="body1" component="div">
               {`Total tasks: ${sumTasks}`}
             </Typography>
             <Typography variant="body1" component="div">
               {`Total hours: ${sumHours.toFixed(2)}`}
             </Typography>
+          </Grid>
+          <Grid item>
+            <Chart items={props.items} />
           </Grid>
         </Grid>
       </Box>

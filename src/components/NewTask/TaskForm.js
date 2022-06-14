@@ -87,7 +87,6 @@ const TaskForm = (props) => {
           color="secondary"
           sx={{ borderRadius: 0 }}
           onClick={saveTypeDataHandler}
-          tabindex="-1"
         >
           <SaveIcon />
         </Button>
@@ -97,7 +96,6 @@ const TaskForm = (props) => {
           color="secondary"
           sx={{ borderRadius: 0 }}
           onClick={deleteTypeDataHandler}
-          tabindex="-1"
         >
           <PlaylistRemoveIcon />
         </Button>
