@@ -8,9 +8,11 @@ import Typography from "@mui/material/Typography";
 
 const axios = require("axios");
 
-const Tasks = () => {
+const Tasks = (props) => {
   const [tasks, setTasks] = useState([]);
   const [types, setTypes] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(props.user.userid);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   // Local date
@@ -32,14 +34,60 @@ const Tasks = () => {
     setFilteredEndDate(selected);
   };
 
+  const selectUserHandler = (selectedUser) => {
+    setSelectedUser(selectedUser);
+  };
+
   const filteredTasks = tasks.filter((task) => {
     // Convert input dates to UTC as dates in database are stored as UTC dates
     const offset = moment().utcOffset();
     const start = moment(filteredStartDate, "MM/DD/YYYY").utcOffset(offset);
-    const end = moment(filteredEndDate, "MM/DD/YYYY").utcOffset(offset).add(1, "days");
+    const end = moment(filteredEndDate, "MM/DD/YYYY")
+      .utcOffset(offset)
+      .add(1, "days");
 
-    return moment(task.date) >= start && moment(task.date) < end;
+    // Check if user is admin
+    if (props.user.username === "admin") {
+      return (
+        moment(task.date) >= start &&
+        moment(task.date) < end &&
+        task.userid === selectedUser
+      );
+    } else {
+      return moment(task.date) >= start && moment(task.date) < end;
+    }
   });
+
+  const getUsersHandler = useCallback(() => {
+    if (props.user.username === "admin") {
+      axios
+        .get(`${config.baseUrl}/users`, {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          const usersData = response.data;
+          const loadedUsers = [];
+
+          for (const key in usersData) {
+            loadedUsers.push({
+              id: usersData[key]._id,
+              username: usersData[key].username,
+            });
+          }
+          // Sort by string
+          loadedUsers.sort((a, b) => (a.username > b.username ? 1 : -1));
+
+          setUsers(loadedUsers);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [props.user.username]);
 
   const getDataHandler = useCallback(() => {
     setIsLoading(true);
@@ -79,6 +127,7 @@ const Tasks = () => {
               minute: tasksData[key].minute,
               second: tasksData[key].second,
               count: tasksData[key].count,
+              userid: tasksData[key].userid,
             });
           }
 
@@ -117,8 +166,9 @@ const Tasks = () => {
   }, []);
 
   useEffect(() => {
+    getUsersHandler();
     getDataHandler();
-  }, [getDataHandler]);
+  }, [getDataHandler, getUsersHandler]);
 
   const addTaskHandler = (task) => {
     axios
@@ -140,6 +190,7 @@ const Tasks = () => {
               minute: response.data.minute,
               second: response.data.second,
               count: response.data.count,
+              userid: response.data.userid,
             },
             ...prevTasks,
           ];
@@ -255,7 +306,7 @@ const Tasks = () => {
       });
   };
 
-  const deleteAllHandler = (prevState) => {
+  const deleteAllHandler = () => {
     axios
       .delete(`${config.baseUrl}/tasks/`, {
         headers: {
@@ -266,7 +317,10 @@ const Tasks = () => {
       .then((response) => {
         console.log(response);
 
-        setTasks((prevState = []));
+        setTasks((prevTasks) => {
+          const updatedTasks = prevTasks.filter((task) => task.userid !== props.user.userid);
+          return updatedTasks;
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -274,21 +328,16 @@ const Tasks = () => {
   };
 
   let content = (
-    <Typography variant="h2" align="center">
-      No tasks found.
-    </Typography>
+    <TasksList
+      items={filteredTasks}
+      types={types}
+      onDeleteItem={deleteTaskHandler}
+      onUpdateItem={updateTaskHandler}
+      user={props.user}
+      users={users}
+      onSelectUser={selectUserHandler}
+    />
   );
-
-  if (tasks.length > 0) {
-    content = (
-      <TasksList
-        items={filteredTasks}
-        types={types}
-        onDeleteItem={deleteTaskHandler}
-        onUpdateItem={updateTaskHandler}
-      />
-    );
-  }
 
   if (error) {
     content = (
@@ -321,6 +370,8 @@ const Tasks = () => {
         filteredEndDate={filteredEndDate}
         onFilterStartDateChange={filterStartDateChangeHandler}
         onFilterEndDateChange={filterEndDateChangeHandler}
+        selectedUser={selectedUser}
+        user={props.user}
       />
 
       {content}

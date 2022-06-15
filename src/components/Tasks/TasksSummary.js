@@ -24,6 +24,9 @@ const TasksSummary = (props) => {
 
   sumHours += (sumMinutes * 60 + sumSeconds) / 60 / 60;
 
+  // Delete all should be disabled if admin browses others' tasks
+  const isDisabled = props.user.username === "admin" && props.selectedUser !== props.user.userid;
+
   return (
     <>
       <Box sx={{ flexGrow: 1, m: 2 }}>
@@ -54,6 +57,7 @@ const TasksSummary = (props) => {
                 onChangeFilter={props.onFilterEndDateChange}
               />
               <Button
+                disabled={isDisabled}
                 disableElevation
                 variant="contained"
                 onClick={props.onDeleteAll}

@@ -31,7 +31,7 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <Tasks />
+      <Tasks user={props.user} />
     </div>
   );
 };

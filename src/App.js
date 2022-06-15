@@ -31,7 +31,7 @@ const App = (props) => {
           path="/dashboard"
           render={() => {
             return localStorage.getItem("token") ? (
-              <Dashboard userHandler={userHandler} />
+              <Dashboard userHandler={userHandler} user={user} />
             ) : (
               <Redirect to="/login" />
             );
