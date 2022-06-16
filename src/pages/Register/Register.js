@@ -74,7 +74,7 @@ const Register = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.username}
+          error={errors.username? true : false}
           helperText={errors.username ? errors.username.message : ""}
           variant="filled"
           label="Username"
@@ -103,7 +103,7 @@ const Register = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.password}
+          error={errors.password? true : false}
           helperText={errors.password ? errors.password.message : ""}
           variant="filled"
           label="Password"

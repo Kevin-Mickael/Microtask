@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -47,15 +47,15 @@ const Navbar = (props) => {
             </Typography>
           )}
           {localStorage.getItem("token") !== null && (
-            <Button
-              variant="contained"
-              disableElevation
-              component="div"
+            <IconButton
+              color="inherit"
+              aria-label="Logout"
+              component="button"
               onClick={logoutHandler}
               sx={{ ml: 2 }}
             >
               <LogoutIcon />
-            </Button>
+            </IconButton>
           )}
         </Toolbar>
       </AppBar>

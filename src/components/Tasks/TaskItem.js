@@ -4,9 +4,9 @@ import moment from "moment";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 
 // Add leading zero
 const zeroPad = (num, places) => String(num).padStart(places, "0");
@@ -51,22 +51,22 @@ const TaskItem = (props) => {
               props.count
             }`}
           </Typography>
-          <Button
-            type="button"
+          <IconButton
             color="secondary"
-            sx={{ minWidth: "24px" }}
+            aria-label="Edit task"
+            component="button"
             onClick={editHandler}
           >
             <EditIcon />
-          </Button>
-          <Button
-            type="button"
-            color="secondary"
+          </IconButton>
+          <IconButton
+            color="error"
+            aria-label="Delete task"
+            component="button"
             onClick={deleteHandler}
-            sx={{ minWidth: "24px" }}
           >
             <DeleteForeverIcon />
-          </Button>
+          </IconButton>
         </>
       )}
     </ListItem>

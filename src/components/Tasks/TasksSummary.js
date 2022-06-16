@@ -25,19 +25,22 @@ const TasksSummary = (props) => {
   sumHours += (sumMinutes * 60 + sumSeconds) / 60 / 60;
 
   // Delete all should be disabled if admin browses others' tasks
-  const isDisabled = props.user.username === "admin" && props.selectedUser !== props.user.userid;
+  const isDisabled =
+    props.user.username === "admin" && props.selectedUser !== props.user.userid;
 
   return (
     <>
       <Box sx={{ flexGrow: 1, m: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={2}>
-            <Typography variant="body1" component="div">
-              {`Total tasks: ${sumTasks}`}
-            </Typography>
-            <Typography variant="body1" component="div">
-              {`Total hours: ${sumHours.toFixed(2)}`}
-            </Typography>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <Typography variant="body1" component="div">
+                {`Total tasks: ${sumTasks}`}
+              </Typography>
+              <Typography variant="body1" component="div">
+                {`Total hours: ${sumHours.toFixed(2)}`}
+              </Typography>
+            </Box>
           </Grid>
 
           <Grid item xs={12} md={8}>
@@ -59,9 +62,9 @@ const TasksSummary = (props) => {
               <Button
                 disabled={isDisabled}
                 disableElevation
-                variant="contained"
+                variant="outlined"
                 onClick={props.onDeleteAll}
-                sx={{ color: "white", borderRadius: 0 }}
+                color="error"
               >
                 Delete All
               </Button>
