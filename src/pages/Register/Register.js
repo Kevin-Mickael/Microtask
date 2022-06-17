@@ -74,7 +74,7 @@ const Register = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.username? true : false}
+          error={errors.username ? true : false}
           helperText={errors.username ? errors.username.message : ""}
           variant="outlined"
           label="Username"
@@ -103,7 +103,7 @@ const Register = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.password? true : false}
+          error={errors.password ? true : false}
           helperText={errors.password ? errors.password.message : ""}
           variant="outlined"
           label="Password"
@@ -131,10 +131,10 @@ const Register = () => {
           })}
         />
         <Button
-          fullWidth
+          disableElevation
           variant="contained"
           type="submit"
-          sx={{ borderRadius: 5, mb: 5 }}
+          sx={{ px: 10, mb: 5 }}
         >
           Submit
         </Button>

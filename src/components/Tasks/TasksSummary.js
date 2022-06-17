@@ -98,7 +98,7 @@ const TasksSummary = (props) => {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  Confirm deleting ALL tasks?
+                  Confirm deleting all tasks?
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">

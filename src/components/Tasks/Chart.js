@@ -109,8 +109,6 @@ const Chart = (props) => {
     ],
   };
 
-  console.log(props.items);
-
   return <Bar height="200px" options={options} data={data} />;
 };
 

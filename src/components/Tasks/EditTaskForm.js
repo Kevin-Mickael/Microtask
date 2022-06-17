@@ -47,9 +47,6 @@ const EditTaskForm = (props) => {
       count: enteredCount,
     };
 
-    console.log(props.id);
-    console.log(taskData);
-
     props.onUpdate(props.id, taskData);
 
     props.onClose();

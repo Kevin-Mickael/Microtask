@@ -48,8 +48,6 @@ const TaskForm = (props) => {
       count: enteredCount,
     };
 
-    console.log(taskData);
-
     props.onSaveTaskData(taskData);
   };
 
@@ -70,9 +68,9 @@ const TaskForm = (props) => {
       container
       spacing={0}
       component="form"
-      noValidate
       autoComplete="off"
       onSubmit={handleSubmit(submitHandler)}
+      noValidate
     >
       <Grid item xs={12} md={8}>
         <Stack direction="row" spacing={0}>
@@ -166,7 +164,6 @@ const TaskForm = (props) => {
             value={enteredMinute}
             onChange={minuteChangeHandler}
           />
-
           <TextField
             error={errors.taskSecond ? true : false}
             helperText={errors.taskSecond ? errors.taskSecond.message : ""}
@@ -197,9 +194,19 @@ const TaskForm = (props) => {
             value={enteredSecond}
             onChange={secondChangeHandler}
           />
+
           <TextField
-            error={errors.taskCount ? true : false}
-            helperText={errors.taskCount ? errors.taskCount.message : ""}
+            id="taskCount"
+            name="taskCount"
+            label="Count"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+            fullWidth
+            sx={{ m: 1 }}
+            value={enteredCount}
             {...register("taskCount", {
               required: {
                 value: true,
@@ -214,19 +221,13 @@ const TaskForm = (props) => {
                 message: "Should be <= 1000.",
               },
             })}
-            id="taskCount"
-            name="taskCount"
-            label="Count"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-            fullWidth
-            sx={{ m: 1 }}
-            value={enteredCount}
             onChange={countChangeHandler}
+            error={errors.taskCount ? true : false}
+            helperText={errors.taskCount ? errors.taskCount.message : ""}
           />
+
+
+
           <Tooltip title="Submit task">
             <IconButton
               color="success"

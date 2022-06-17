@@ -77,7 +77,7 @@ const Login = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.username? true : false}
+          error={errors.username ? true : false}
           helperText={errors.username ? errors.username.message : ""}
           variant="outlined"
           label="Username"
@@ -106,7 +106,7 @@ const Login = () => {
         <TextField
           fullWidth
           sx={{ mb: 3 }}
-          error={errors.password? true : false}
+          error={errors.password ? true : false}
           helperText={errors.password ? errors.password.message : ""}
           variant="outlined"
           label="Password"
@@ -134,10 +134,10 @@ const Login = () => {
           })}
         />
         <Button
-          fullWidth
+          disableElevation
           variant="contained"
           type="submit"
-          sx={{ borderRadius: 5, mb: 5 }}
+          sx={{ px: 10, mb: 5 }}
         >
           Login
         </Button>
@@ -145,6 +145,7 @@ const Login = () => {
           Don't have an account?
         </Typography>
         <Button
+          disableElevation
           variant="contained"
           color="secondary"
           component={Link}

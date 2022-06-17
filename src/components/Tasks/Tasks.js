@@ -5,8 +5,14 @@ import TasksList from "./TasksList";
 import TasksSummary from "./TasksSummary";
 import config from "../../config";
 import Typography from "@mui/material/Typography";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const axios = require("axios");
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={3} ref={ref} variant="filled" {...props} />;
+});
 
 const Tasks = (props) => {
   const [tasks, setTasks] = useState([]);
@@ -15,6 +21,20 @@ const Tasks = (props) => {
   const [selectedUser, setSelectedUser] = useState(props.user.userid);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState({
+    open: false,
+    severity: "success",
+    content: "",
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setMessage({ open: false, severity: "success", content: "" });
+  };
+
   // Local date
   const [filteredStartDate, setFilteredStartDate] = useState(
     new Date(
@@ -68,7 +88,6 @@ const Tasks = (props) => {
           },
         })
         .then((response) => {
-          console.log(response);
           const usersData = response.data;
           const loadedUsers = [];
 
@@ -85,6 +104,7 @@ const Tasks = (props) => {
         })
         .catch((error) => {
           console.log(error);
+          setMessage({ open: true, severity: "error", content: "Something went wrong." });
         });
     }
   }, [props.user.username]);
@@ -111,11 +131,7 @@ const Tasks = (props) => {
       .all([requestTasks, requestTypes])
       .then(
         axios.spread((TasksResponse, TypesResponse) => {
-          console.log(TasksResponse.data, TypesResponse.data);
-
           // Handle TasksResponse
-          console.log(TasksResponse.data);
-
           const tasksData = TasksResponse.data;
           const loadedTasks = [];
 
@@ -139,8 +155,6 @@ const Tasks = (props) => {
           setTasks(loadedTasks);
 
           // Handle TypesResponse
-          console.log(TypesResponse.data);
-
           const typesData = TypesResponse.data;
           const loadedTypes = [];
 
@@ -179,7 +193,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTasks((prevTasks) => {
           return [
@@ -195,9 +208,12 @@ const Tasks = (props) => {
             ...prevTasks,
           ];
         });
+
+        setMessage({ open: true, severity: "success", content: "New task added." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -210,7 +226,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTypes((prevTypes) => {
           const newTypes = [
@@ -220,16 +235,17 @@ const Tasks = (props) => {
             },
             ...prevTypes,
           ];
-          console.log(newTypes);
           // Sort by string
           newTypes.sort((a, b) => (a.type > b.type ? 1 : -1));
-          console.log(newTypes);
 
           return newTypes;
         });
+
+        setMessage({ open: true, severity: "success", content: "New task type added." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -242,15 +258,17 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
           return updatedTasks;
         });
+
+        setMessage({ open: true, severity: "success", content: "Task deleted." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -266,16 +284,17 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTypes((prevTypes) => {
           const updatedTypes = prevTypes.filter((item) => item.type !== type);
-          console.log(updatedTypes);
           return updatedTypes;
         });
+
+        setMessage({ open: true, severity: "success", content: "Task type deleted." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -288,7 +307,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.map((task) => {
@@ -300,9 +318,12 @@ const Tasks = (props) => {
           });
           return updatedTasks;
         });
+
+        setMessage({ open: true, severity: "success", content: "Task updated." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -315,15 +336,19 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
 
         setTasks((prevTasks) => {
-          const updatedTasks = prevTasks.filter((task) => task.userid !== props.user.userid);
+          const updatedTasks = prevTasks.filter(
+            (task) => task.userid !== props.user.userid
+          );
           return updatedTasks;
         });
+
+        setMessage({ open: true, severity: "success", content: "All tasks have been deleted." });
       })
       .catch((error) => {
         console.log(error);
+        setMessage({ open: true, severity: "error", content: "Something went wrong." });
       });
   };
 
@@ -375,6 +400,24 @@ const Tasks = (props) => {
       />
 
       {content}
+
+      <Snackbar
+        open={message.open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={message.severity}
+          sx={{ width: "100%" }}
+        >
+          {message.content}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
