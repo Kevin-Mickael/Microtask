@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -6,46 +6,27 @@ import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import Stack from "@mui/material/Stack";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 const TaskForm = (props) => {
   const {
-    register,
     handleSubmit,
     formState: { errors },
+    control,
+    setValue,
+    getValues,
   } = useForm();
 
-  const [enteredType, setEnteredType] = useState("");
-  const [enteredMinute, setEnteredMinute] = useState("");
-  const [enteredSecond, setEnteredSecond] = useState("");
-  const [enteredCount, setEnteredCount] = useState("");
-
-  const typeChangeHandler = (event, values) => {
-    setEnteredType(values);
-  };
-
-  const minuteChangeHandler = (event) => {
-    setEnteredMinute(event.target.value);
-  };
-
-  const secondChangeHandler = (event) => {
-    setEnteredSecond(event.target.value);
-  };
-
-  const countChangeHandler = (event) => {
-    setEnteredCount(event.target.value);
-  };
-
-  const submitHandler = () => {
+  const submitHandler = (data) => {
     const taskData = {
       date: new Date(),
-      type: enteredType,
-      minute: enteredMinute,
-      second: enteredSecond,
-      count: enteredCount,
+      type: data.taskType,
+      minute: data.taskMinute,
+      second: data.taskSecond,
+      count: data.taskCount,
     };
 
     props.onSaveTaskData(taskData);
@@ -53,14 +34,14 @@ const TaskForm = (props) => {
 
   const saveTypeDataHandler = () => {
     const typeData = {
-      type: enteredType,
+      type: getValues("taskType"),
     };
     props.onAddType(typeData);
   };
 
   const deleteTypeDataHandler = () => {
-    props.onDeleteTypeData(enteredType);
-    setEnteredType("");
+    props.onDeleteTypeData(getValues("taskType"));
+    setValue("taskType", "");
   };
 
   return (
@@ -74,39 +55,50 @@ const TaskForm = (props) => {
     >
       <Grid item xs={12} md={8}>
         <Stack direction="row" spacing={0}>
-          <Autocomplete
-            id="taskType"
+          <Controller
+            control={control}
             name="taskType"
-            fullWidth
-            sx={{ m: 1 }}
-            freeSolo
-            options={props.types.map((option) => option.type)}
-            value={enteredType}
-            onInputChange={typeChangeHandler}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="What task are you working on?"
-                variant="outlined"
-                error={errors.taskType ? true : false}
-                helperText={errors.taskType ? errors.taskType.message : ""}
-                {...register("taskType", {
-                  required: {
-                    value: true,
-                    message: "Required.",
-                  },
-                  minLength: {
-                    value: 1,
-                    message: "Required.",
-                  },
-                  maxLength: {
-                    value: 128,
-                    message: "Maximum 128 characters.",
-                  },
-                })}
+            defaultValue=""
+            rules={{
+              required: {
+                value: true,
+                message: "Required.",
+              },
+              minLength: {
+                value: 1,
+                message: "Required.",
+              },
+              maxLength: {
+                value: 128,
+                message: "Maximum 128 characters.",
+              },
+            }}
+            render={({ field: { ref, onChange, value, ...field } }) => (
+              <Autocomplete
+                {...field}
+                onChange={(e, v) => onChange(v)}
+                id="taskType"
+                fullWidth
+                value={value}
+                sx={{ m: 1 }}
+                freeSolo
+                options={props.types.map((option) => option.type)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    inputRef={ref}
+                    onChange={onChange}
+                    value={value}
+                    label="What task are you working on?"
+                    variant="outlined"
+                    error={errors.taskType ? true : false}
+                    helperText={errors.taskType ? errors.taskType.message : ""}
+                  />
+                )}
               />
             )}
           />
+
           <Tooltip title="Save task type">
             <IconButton
               color="secondary"
@@ -133,10 +125,11 @@ const TaskForm = (props) => {
       </Grid>
       <Grid item xs={12} md={4}>
         <Box display="flex" justifyContent="flex-end">
-          <TextField
-            error={errors.taskMinute ? true : false}
-            helperText={errors.taskMinute ? errors.taskMinute.message : ""}
-            {...register("taskMinute", {
+          <Controller
+            name="taskMinute"
+            control={control}
+            defaultValue={0}
+            rules={{
               required: {
                 value: true,
                 message: "Required.",
@@ -149,25 +142,31 @@ const TaskForm = (props) => {
                 value: 1440,
                 message: "Should be <= 1440.",
               },
-            })}
-            id="taskMinute"
-            name="taskMinute"
-            label="Minute"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
             }}
-            inputProps={{ min: 0 }}
-            variant="outlined"
-            fullWidth
-            sx={{ m: 1 }}
-            value={enteredMinute}
-            onChange={minuteChangeHandler}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                error={errors.taskMinute ? true : false}
+                helperText={errors.taskMinute ? errors.taskMinute.message : ""}
+                id="taskMinute"
+                label="Minute"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{ min: 0 }}
+                variant="outlined"
+                fullWidth
+                sx={{ m: 1 }}
+              />
+            )}
           />
-          <TextField
-            error={errors.taskSecond ? true : false}
-            helperText={errors.taskSecond ? errors.taskSecond.message : ""}
-            {...register("taskSecond", {
+
+          <Controller
+            name="taskSecond"
+            control={control}
+            defaultValue={0}
+            rules={{
               required: {
                 value: true,
                 message: "Required.",
@@ -180,34 +179,30 @@ const TaskForm = (props) => {
                 value: 59,
                 message: "Should be <= 59.",
               },
-            })}
-            id="taskSecond"
-            name="taskSecond"
-            label="Second"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
             }}
-            variant="outlined"
-            fullWidth
-            sx={{ m: 1 }}
-            value={enteredSecond}
-            onChange={secondChangeHandler}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                error={errors.taskSecond ? true : false}
+                helperText={errors.taskSecond ? errors.taskSecond.message : ""}
+                id="taskSecond"
+                label="Second"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                fullWidth
+                sx={{ m: 1 }}
+              />
+            )}
           />
 
-          <TextField
-            id="taskCount"
+          <Controller
             name="taskCount"
-            label="Count"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-            fullWidth
-            sx={{ m: 1 }}
-            value={enteredCount}
-            {...register("taskCount", {
+            control={control}
+            defaultValue={1}
+            rules={{
               required: {
                 value: true,
                 message: "Required.",
@@ -220,13 +215,24 @@ const TaskForm = (props) => {
                 value: 1000,
                 message: "Should be <= 1000.",
               },
-            })}
-            onChange={countChangeHandler}
-            error={errors.taskCount ? true : false}
-            helperText={errors.taskCount ? errors.taskCount.message : ""}
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                error={errors.taskCount ? true : false}
+                helperText={errors.taskCount ? errors.taskCount.message : ""}
+                id="taskCount"
+                label="Count"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                fullWidth
+                sx={{ m: 1 }}
+              />
+            )}
           />
-
-
 
           <Tooltip title="Submit task">
             <IconButton

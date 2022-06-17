@@ -150,6 +150,7 @@ const Login = () => {
           color="secondary"
           component={Link}
           to="/register"
+          sx={{ px: 5 }}
         >
           Register
         </Button>
