@@ -79,6 +79,7 @@ const TaskForm = (props) => {
             id="taskType"
             name="taskType"
             fullWidth
+            sx={{ m: 1 }}
             freeSolo
             options={props.types.map((option) => option.type)}
             value={enteredType}
@@ -87,7 +88,7 @@ const TaskForm = (props) => {
               <TextField
                 {...params}
                 label="What task are you working on?"
-                variant="filled"
+                variant="outlined"
                 error={errors.taskType ? true : false}
                 helperText={errors.taskType ? errors.taskType.message : ""}
                 {...register("taskType", {
@@ -108,6 +109,7 @@ const TaskForm = (props) => {
             )}
           />
           <IconButton
+            disableRipple
             color="secondary"
             aria-label="Add type"
             component="button"
@@ -117,6 +119,7 @@ const TaskForm = (props) => {
           </IconButton>
 
           <IconButton
+            disableRipple
             color="secondary"
             aria-label="Remove type"
             component="button"
@@ -153,8 +156,9 @@ const TaskForm = (props) => {
               shrink: true,
             }}
             inputProps={{ min: 0 }}
-            variant="filled"
+            variant="outlined"
             fullWidth
+            sx={{ m: 1 }}
             value={enteredMinute}
             onChange={minuteChangeHandler}
           />
@@ -183,8 +187,9 @@ const TaskForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            variant="filled"
+            variant="outlined"
             fullWidth
+            sx={{ m: 1 }}
             value={enteredSecond}
             onChange={secondChangeHandler}
           />
@@ -212,12 +217,14 @@ const TaskForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            variant="filled"
+            variant="outlined"
             fullWidth
+            sx={{ m: 1 }}
             value={enteredCount}
             onChange={countChangeHandler}
           />
           <IconButton
+            disableRipple
             color="success"
             aria-label="Add task"
             component="button"

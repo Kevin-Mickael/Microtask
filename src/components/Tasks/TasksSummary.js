@@ -34,10 +34,10 @@ const TasksSummary = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={2}>
             <Box display="flex" flexDirection="column" alignItems="center">
-              <Typography variant="body1" component="div">
+              <Typography variant="subtitle1" component="div">
                 {`Total tasks: ${sumTasks}`}
               </Typography>
-              <Typography variant="body1" component="div">
+              <Typography variant="subtitle1" component="div">
                 {`Total hours: ${sumHours.toFixed(2)}`}
               </Typography>
             </Box>

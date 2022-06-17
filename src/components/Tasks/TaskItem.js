@@ -4,8 +4,8 @@ import moment from "moment";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from "@mui/material/IconButton";
 
 // Add leading zero
@@ -52,12 +52,12 @@ const TaskItem = (props) => {
             }`}
           </Typography>
           <IconButton
-            color="secondary"
+            color="warning"
             aria-label="Edit task"
             component="button"
             onClick={editHandler}
           >
-            <EditIcon />
+            <EditOutlinedIcon />
           </IconButton>
           <IconButton
             color="error"
@@ -65,7 +65,7 @@ const TaskItem = (props) => {
             component="button"
             onClick={deleteHandler}
           >
-            <DeleteForeverIcon />
+            <DeleteOutlineOutlinedIcon />
           </IconButton>
         </>
       )}

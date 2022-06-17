@@ -139,7 +139,7 @@ const Register = () => {
           Submit
         </Button>
         <Typography variant="h6" component="div">
-          <Link to="/login" style={{ textDecoration: "none" }}>
+          <Link to="/login" style={{ color: "black", textDecoration: "none" }}>
             Cancel
           </Link>
         </Typography>
