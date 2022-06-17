@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TasksFilter from "./TasksFilter";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
@@ -7,8 +7,29 @@ import Grid from "@mui/material/Grid";
 import Chart from "./Chart";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Tooltip from "@mui/material/Tooltip";
 
 const TasksSummary = (props) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const deleteHandler = () => {
+    props.onDeleteAll();
+    handleClose();
+  };
+
   let sumTasks = 0;
   let sumMinutes = 0;
   let sumSeconds = 0;
@@ -59,15 +80,40 @@ const TasksSummary = (props) => {
                 selected={props.filteredEndDate}
                 onChangeFilter={props.onFilterEndDateChange}
               />
-              <Button
-                disabled={isDisabled}
-                disableElevation
-                variant="outlined"
-                onClick={props.onDeleteAll}
-                color="error"
+              <Tooltip title="Delete all tasks">
+                <Button
+                  disabled={isDisabled}
+                  disableElevation
+                  variant="outlined"
+                  onClick={handleClickOpen}
+                  color="error"
+                >
+                  Delete All
+                </Button>
+              </Tooltip>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
               >
-                Delete All
-              </Button>
+                <DialogTitle id="alert-dialog-title">
+                  Confirm deleting ALL tasks?
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    <Typography variant="body1" color="error" component="span">
+                      This action is not reversible.
+                    </Typography>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={deleteHandler} autoFocus>
+                    Yes
+                  </Button>
+                  <Button onClick={handleClose}>Cancel</Button>
+                </DialogActions>
+              </Dialog>
             </Stack>
           </Grid>
         </Grid>

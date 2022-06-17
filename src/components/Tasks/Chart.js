@@ -104,6 +104,7 @@ const Chart = (props) => {
         }),
         backgroundColor: "#827717",
         maxBarThickness: 100,
+        borderRadius: 3,
       },
     ],
   };

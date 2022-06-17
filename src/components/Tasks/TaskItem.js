@@ -4,15 +4,31 @@ import moment from "moment";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Tooltip from "@mui/material/Tooltip";
 
 // Add leading zero
 const zeroPad = (num, places) => String(num).padStart(places, "0");
 
 const TaskItem = (props) => {
   const [edit, setEdit] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const editHandler = () => {
     setEdit(true);
@@ -51,22 +67,54 @@ const TaskItem = (props) => {
               props.count
             }`}
           </Typography>
-          <IconButton
-            color="warning"
-            aria-label="Edit task"
-            component="button"
-            onClick={editHandler}
+          <Tooltip title="Edit task">
+            <IconButton
+              color="warning"
+              aria-label="Edit task"
+              component="button"
+              onClick={editHandler}
+            >
+              <EditOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete task">
+            <IconButton
+              color="error"
+              aria-label="Delete task"
+              component="button"
+              onClick={handleClickOpen}
+            >
+              <DeleteOutlineOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
           >
-            <EditOutlinedIcon />
-          </IconButton>
-          <IconButton
-            color="error"
-            aria-label="Delete task"
-            component="button"
-            onClick={deleteHandler}
-          >
-            <DeleteOutlineOutlinedIcon />
-          </IconButton>
+            <DialogTitle id="alert-dialog-title">
+              Confirm deleting this task?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Date: {moment(props.date).format("MMMM Do YYYY, h:mm:ss a")}{" "}
+                <br />
+                Task: {props.type} <br />
+                Time: {`${props.minute}:${zeroPad(props.second, 2)}`} <br />
+                Count: {props.count} <br />
+                <Typography variant="body1" color="error" component="span">
+                  This action is not reversible.
+                </Typography>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={deleteHandler} autoFocus>
+                Yes
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </ListItem>

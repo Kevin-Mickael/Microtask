@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
 
 const Navbar = (props) => {
   const history = useHistory();
@@ -47,15 +48,17 @@ const Navbar = (props) => {
             </Typography>
           )}
           {localStorage.getItem("token") !== null && (
-            <IconButton
-              color="inherit"
-              aria-label="Logout"
-              component="button"
-              onClick={logoutHandler}
-              sx={{ ml: 2 }}
-            >
-              <LogoutIcon />
-            </IconButton>
+            <Tooltip title="Logout">
+              <IconButton
+                color="inherit"
+                aria-label="Logout"
+                component="button"
+                onClick={logoutHandler}
+                sx={{ ml: 2 }}
+              >
+                <LogoutIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </Toolbar>
       </AppBar>

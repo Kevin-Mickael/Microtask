@@ -9,6 +9,7 @@ import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 const TaskForm = (props) => {
   const {
@@ -108,25 +109,28 @@ const TaskForm = (props) => {
               />
             )}
           />
-          <IconButton
-            disableRipple
-            color="secondary"
-            aria-label="Add type"
-            component="button"
-            onClick={saveTypeDataHandler}
-          >
-            <BookmarkAddIcon fontSize="large" />
-          </IconButton>
-
-          <IconButton
-            disableRipple
-            color="secondary"
-            aria-label="Remove type"
-            component="button"
-            onClick={deleteTypeDataHandler}
-          >
-            <BookmarkRemoveIcon fontSize="large" />
-          </IconButton>
+          <Tooltip title="Save task type">
+            <IconButton
+              color="secondary"
+              aria-label="Add type"
+              component="button"
+              onClick={saveTypeDataHandler}
+              tabIndex={-1}
+            >
+              <BookmarkAddIcon fontSize="large" sx={{ p: 1 }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete task type">
+            <IconButton
+              color="secondary"
+              aria-label="Remove type"
+              component="button"
+              onClick={deleteTypeDataHandler}
+              tabIndex={-1}
+            >
+              <BookmarkRemoveIcon fontSize="large" sx={{ p: 1 }} />
+            </IconButton>
+          </Tooltip>
         </Stack>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -223,15 +227,16 @@ const TaskForm = (props) => {
             value={enteredCount}
             onChange={countChangeHandler}
           />
-          <IconButton
-            disableRipple
-            color="success"
-            aria-label="Add task"
-            component="button"
-            type="submit"
-          >
-            <AddCircleOutlinedIcon fontSize="large" />
-          </IconButton>
+          <Tooltip title="Submit task">
+            <IconButton
+              color="success"
+              aria-label="Add task"
+              component="button"
+              type="submit"
+            >
+              <AddCircleOutlinedIcon sx={{ p: 1 }} fontSize="large" />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Grid>
     </Grid>

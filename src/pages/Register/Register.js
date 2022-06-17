@@ -76,7 +76,7 @@ const Register = () => {
           sx={{ mb: 3 }}
           error={errors.username? true : false}
           helperText={errors.username ? errors.username.message : ""}
-          variant="filled"
+          variant="outlined"
           label="Username"
           id="username"
           type="text"
@@ -105,7 +105,7 @@ const Register = () => {
           sx={{ mb: 3 }}
           error={errors.password? true : false}
           helperText={errors.password ? errors.password.message : ""}
-          variant="filled"
+          variant="outlined"
           label="Password"
           id="password"
           type="password"

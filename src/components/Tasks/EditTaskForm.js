@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 const EditTaskForm = (props) => {
   const {
@@ -198,24 +199,26 @@ const EditTaskForm = (props) => {
             value={enteredCount}
             onChange={countChangeHandler}
           />
-
-          <IconButton
-            color="success"
-            aria-label="Confirm edit"
-            component="button"
-            type="submit"
-          >
-            <DoneIcon />
-          </IconButton>
-
-          <IconButton
-            color="error"
-            aria-label="Cancel edit"
-            component="button"
-            onClick={props.onClose}
-          >
-            <CloseIcon />
-          </IconButton>
+          <Tooltip title="Confirm edit">
+            <IconButton
+              color="success"
+              aria-label="Confirm edit"
+              component="button"
+              type="submit"
+            >
+              <DoneIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Cancel edit">
+            <IconButton
+              color="error"
+              aria-label="Cancel edit"
+              component="button"
+              onClick={props.onClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Grid>
     </Grid>
