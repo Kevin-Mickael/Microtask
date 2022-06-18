@@ -13,9 +13,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
+import { useSelector } from "react-redux";
 
 const TasksSummary = (props) => {
   const [open, setOpen] = useState(false);
+  const authUser = useSelector((state) => state.auth);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,7 +49,8 @@ const TasksSummary = (props) => {
 
   // Delete all should be disabled if admin browses others' tasks
   const isDisabled =
-    props.user.username === "admin" && props.selectedUser !== props.user.userid;
+    authUser.username === "admin" &&
+    props.selectedUser !== authUser.userid;
 
   return (
     <>

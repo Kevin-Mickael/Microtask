@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -7,19 +7,9 @@ import NotFound from "./pages/NotFound/NotFound";
 import Navbar from "./components/Navbar/Navbar";
 
 const App = (props) => {
-  const [user, setUser] = useState({});
-
-  const logoutHandler = () => {
-    setUser({});
-  };
-
-  const userHandler = useCallback((username, userid) => {
-    setUser({ username, userid });
-  }, []);
-
   return (
     <BrowserRouter {...props}>
-      <Navbar user={user} onLogout={logoutHandler} />
+      <Navbar />
       <Switch>
         <Route path="/login">
           <Login />
@@ -31,7 +21,7 @@ const App = (props) => {
           path="/dashboard"
           render={() => {
             return localStorage.getItem("token") ? (
-              <Dashboard userHandler={userHandler} user={user} />
+              <Dashboard />
             ) : (
               <Redirect to="/login" />
             );

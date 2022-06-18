@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import Tasks from "../../components/Tasks/Tasks";
 import config from "../../config";
 import Typography from "@mui/material/Typography";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth";
 
 const axios = require("axios");
 
 const Dashboard = (props) => {
   const [error, setError] = useState(null);
-
-  const { userHandler } = props;
+  const dispatch = useDispatch();
 
   const getUserHandler = useCallback(() => {
     setError(null);
@@ -22,13 +23,19 @@ const Dashboard = (props) => {
       })
       .then((response) => {
         const data = response.data.data;
-        userHandler(data.user.username, data.user.id);
+
+        dispatch(
+          authActions.login({
+            username: data.user.username,
+            userid: data.user.id,
+          })
+        );
       })
       .catch((error) => {
         console.log(error.message);
         setError(error.message);
       });
-  }, [userHandler]);
+  }, [dispatch]);
 
   useEffect(() => {
     getUserHandler();
@@ -36,7 +43,7 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <Tasks user={props.user} />
+      <Tasks />
       {error && (
         <Typography variant="h2" align="center">
           {error}

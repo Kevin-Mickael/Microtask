@@ -7,6 +7,7 @@ import config from "../../config";
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useSelector } from "react-redux";
 
 const axios = require("axios");
 
@@ -15,10 +16,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const Tasks = (props) => {
+  const authUser = useSelector((state) => state.auth);
   const [tasks, setTasks] = useState([]);
   const [types, setTypes] = useState([]);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(props.user.userid);
+  const [selectedUser, setSelectedUser] = useState(authUser.userid);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState({
@@ -67,7 +69,7 @@ const Tasks = (props) => {
       .add(1, "days");
 
     // Check if user is admin
-    if (props.user.username === "admin") {
+    if (authUser.username === "admin") {
       return (
         moment(task.date) >= start &&
         moment(task.date) < end &&
@@ -79,7 +81,7 @@ const Tasks = (props) => {
   });
 
   const getUsersHandler = useCallback(() => {
-    if (props.user.username === "admin") {
+    if (authUser.username === "admin") {
       axios
         .get(`${config.baseUrl}/users`, {
           headers: {
@@ -107,7 +109,7 @@ const Tasks = (props) => {
           setMessage({ open: true, severity: "error", content: "Something went wrong." });
         });
     }
-  }, [props.user.username]);
+  }, [authUser.username]);
 
   const getDataHandler = useCallback(() => {
     setIsLoading(true);
@@ -339,7 +341,7 @@ const Tasks = (props) => {
 
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.filter(
-            (task) => task.userid !== props.user.userid
+            (task) => task.userid !== authUser.userid
           );
           return updatedTasks;
         });
@@ -358,7 +360,6 @@ const Tasks = (props) => {
       types={types}
       onDeleteItem={deleteTaskHandler}
       onUpdateItem={updateTaskHandler}
-      user={props.user}
       users={users}
       onSelectUser={selectUserHandler}
     />
@@ -396,7 +397,6 @@ const Tasks = (props) => {
         onFilterStartDateChange={filterStartDateChangeHandler}
         onFilterEndDateChange={filterEndDateChangeHandler}
         selectedUser={selectedUser}
-        user={props.user}
       />
 
       {content}

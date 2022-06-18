@@ -8,10 +8,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-
+import { useSelector } from "react-redux";
 
 const TasksList = (props) => {
-
+  const authUser = useSelector((state) => state.auth);
   const [user, setUser] = React.useState("");
 
   const handleChange = (event) => {
@@ -21,7 +21,7 @@ const TasksList = (props) => {
 
   return (
     <div>
-      {props.user.username === "admin" && (
+      {authUser.username === "admin" && (
         <>
           <Stack direction="row" justifyContent="center">
             <FormControl sx={{ m: 1, minWidth: 120 }}>

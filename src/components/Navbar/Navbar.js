@@ -10,14 +10,19 @@ import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth';
+
 
 const Navbar = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth);
 
   const logoutHandler = () => {
     localStorage.clear();
+    dispatch(authActions.logout());
     history.push("/login");
-    props.onLogout();
   };
 
   return (
@@ -42,12 +47,12 @@ const Navbar = (props) => {
               Microtask Counter
             </Link>
           </Typography>
-          {localStorage.getItem("token") !== null && (
+          {authUser.username !== "" && (
             <Typography variant="h6" color="inherit" component="div">
-              {props.user.username}
+              {authUser.username}
             </Typography>
           )}
-          {localStorage.getItem("token") !== null && (
+          {authUser.username !== "" && (
             <Tooltip title="Logout">
               <IconButton
                 color="inherit"
