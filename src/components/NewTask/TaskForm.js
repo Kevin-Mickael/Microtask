@@ -77,9 +77,9 @@ const TaskForm = (props) => {
               <Autocomplete
                 {...field}
                 onChange={(e, v) => onChange(v)}
+                value={value}
                 id="taskType"
                 fullWidth
-                value={value}
                 sx={{ m: 1 }}
                 freeSolo
                 options={props.types.map((option) => option.type)}

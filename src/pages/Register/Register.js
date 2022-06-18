@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
 import config from "../../config";
 
@@ -15,9 +15,9 @@ const axios = require("axios");
 
 const Register = () => {
   const {
-    register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
 
   const [message, setMessage] = useState();
@@ -71,16 +71,11 @@ const Register = () => {
         <Typography variant="h1" component="div">
           User Registration
         </Typography>
-        <TextField
-          fullWidth
-          sx={{ mb: 3 }}
-          error={errors.username ? true : false}
-          helperText={errors.username ? errors.username.message : ""}
-          variant="outlined"
-          label="Username"
-          id="username"
-          type="text"
-          {...register("username", {
+        <Controller
+          name="username"
+          control={control}
+          defaultValue={""}
+          rules={{
             required: {
               value: true,
               message: "Please enter a username.",
@@ -98,18 +93,26 @@ const Register = () => {
               message:
                 "Username should contain letters, numbers, underscore, and dash only.",
             },
-          })}
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              sx={{ mb: 3 }}
+              error={errors.username ? true : false}
+              helperText={errors.username ? errors.username.message : ""}
+              variant="outlined"
+              label="Username"
+              id="username"
+              type="text"
+            />
+          )}
         />
-        <TextField
-          fullWidth
-          sx={{ mb: 3 }}
-          error={errors.password ? true : false}
-          helperText={errors.password ? errors.password.message : ""}
-          variant="outlined"
-          label="Password"
-          id="password"
-          type="password"
-          {...register("password", {
+        <Controller
+          name="password"
+          control={control}
+          defaultValue={""}
+          rules={{
             required: {
               value: true,
               message: "Please enter a password.",
@@ -128,7 +131,20 @@ const Register = () => {
               message:
                 "Password should contain at least 1 upper case English letter, 1 lower case English letter, and 1 special character.",
             },
-          })}
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              sx={{ mb: 3 }}
+              error={errors.password ? true : false}
+              helperText={errors.password ? errors.password.message : ""}
+              variant="outlined"
+              label="Password"
+              id="password"
+              type="password"
+            />
+          )}
         />
         <Button
           disableElevation
