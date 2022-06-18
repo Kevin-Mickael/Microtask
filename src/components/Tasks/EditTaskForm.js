@@ -159,7 +159,7 @@ const EditTaskForm = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                inputProps={{ min: 0, max: 60 }}
+                inputProps={{ min: 0, max: 59 }}
                 fullWidth
               />
             )}
@@ -196,7 +196,7 @@ const EditTaskForm = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                inputProps={{ min: 0 }}
+                inputProps={{ min: 1 }}
                 fullWidth
               />
             )}

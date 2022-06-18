@@ -191,6 +191,7 @@ const TaskForm = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{ min: 0, max: 59 }}
                 variant="outlined"
                 fullWidth
                 sx={{ m: 1 }}
@@ -227,6 +228,7 @@ const TaskForm = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{ min: 1 }}
                 variant="outlined"
                 fullWidth
                 sx={{ m: 1 }}
