@@ -232,6 +232,16 @@ const Tasks = (props) => {
   };
 
   const addTypeHandler = (type) => {
+    // Do not submit if type is "" or null
+    if (type.type === "" || type.type === null) {
+      setMessage({
+        open: true,
+        severity: "error",
+        content: "Please input task type.",
+      });
+      return;
+    }
+
     // Extract type from types array
     const checkTypes = types.map((type) => type.type);
 
@@ -314,6 +324,16 @@ const Tasks = (props) => {
   };
 
   const deleteTypeHandler = (type) => {
+    // Do not submit if type is "" or null
+    if (type === "" || type === null) {
+      setMessage({
+        open: true,
+        severity: "error",
+        content: "Please input task type.",
+      });
+      return;
+    }
+
     axios
       .delete(`${config.baseUrl}/types`, {
         data: {
