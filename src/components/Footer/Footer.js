@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        width: "100vw",
+        maxWidth: "100vw",
         backgroundColor: grey[100],
         textAlign: "center",
         py: 1,
