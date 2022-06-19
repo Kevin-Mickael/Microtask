@@ -44,6 +44,8 @@ const TaskForm = (props) => {
     setValue("taskType", "");
   };
 
+  const options = props.types.map((option) => option.type);
+
   return (
     <Grid
       container
@@ -82,7 +84,7 @@ const TaskForm = (props) => {
                 fullWidth
                 sx={{ m: 1 }}
                 freeSolo
-                options={props.types.map((option) => option.type)}
+                options={options}
                 renderInput={(params) => (
                   <TextField
                     {...params}

@@ -31,6 +31,8 @@ const EditTaskForm = (props) => {
     props.onClose();
   };
 
+  const options = props.types.map((option) => option.type);
+
   return (
     <Grid
       container
@@ -73,7 +75,7 @@ const EditTaskForm = (props) => {
               fullWidth
               freeSolo
               size="small"
-              options={props.types.map((option) => option.type)}
+              options={options}
               renderInput={(params) => (
                 <TextField
                   {...params}
