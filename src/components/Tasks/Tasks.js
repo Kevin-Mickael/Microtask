@@ -107,7 +107,11 @@ const Tasks = (props) => {
         })
         .catch((error) => {
           console.log(error);
-          setMessage({ open: true, severity: "error", content: "Something went wrong." });
+          setMessage({
+            open: true,
+            severity: "error",
+            content: "Something went wrong.",
+          });
         });
     }
   }, [authUser.username]);
@@ -196,7 +200,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTasks((prevTasks) => {
           return [
             {
@@ -212,15 +215,36 @@ const Tasks = (props) => {
           ];
         });
 
-        setMessage({ open: true, severity: "success", content: "New task added." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "New task added.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
   const addTypeHandler = (type) => {
+    // Extract type from types array
+    const checkTypes = types.map((type) => type.type);
+
+    // Do not submit if type exists
+    if (checkTypes.includes(type.type)) {
+      setMessage({
+        open: true,
+        severity: "error",
+        content: "Type already exists.",
+      });
+      return;
+    }
+
     axios
       .post(`${config.baseUrl}/types`, type, {
         headers: {
@@ -229,7 +253,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTypes((prevTypes) => {
           const newTypes = [
             {
@@ -244,11 +267,19 @@ const Tasks = (props) => {
           return newTypes;
         });
 
-        setMessage({ open: true, severity: "success", content: "New task type added." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "New task type added.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
@@ -261,17 +292,24 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
           return updatedTasks;
         });
 
-        setMessage({ open: true, severity: "success", content: "Task deleted." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "Task deleted.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
@@ -287,17 +325,24 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTypes((prevTypes) => {
           const updatedTypes = prevTypes.filter((item) => item.type !== type);
           return updatedTypes;
         });
 
-        setMessage({ open: true, severity: "success", content: "Task type deleted." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "Task type deleted.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
@@ -310,7 +355,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.map((task) => {
             if (task.id === taskId) {
@@ -322,11 +366,19 @@ const Tasks = (props) => {
           return updatedTasks;
         });
 
-        setMessage({ open: true, severity: "success", content: "Task updated." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "Task updated.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
@@ -339,7 +391,6 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-
         setTasks((prevTasks) => {
           const updatedTasks = prevTasks.filter(
             (task) => task.userid !== authUser.userid
@@ -347,11 +398,19 @@ const Tasks = (props) => {
           return updatedTasks;
         });
 
-        setMessage({ open: true, severity: "success", content: "All tasks have been deleted." });
+        setMessage({
+          open: true,
+          severity: "success",
+          content: "All tasks have been deleted.",
+        });
       })
       .catch((error) => {
         console.log(error);
-        setMessage({ open: true, severity: "error", content: "Something went wrong." });
+        setMessage({
+          open: true,
+          severity: "error",
+          content: "Something went wrong.",
+        });
       });
   };
 
