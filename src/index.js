@@ -31,6 +31,11 @@ const theme = createTheme({
       fontWeight: 700,
       padding: "0.5rem",
     },
+    h3: {
+      fontSize: "1.5rem",
+      fontWeight: 700,
+      padding: "0.5rem",
+    },
   },
 });
 

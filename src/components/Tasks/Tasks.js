@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
+import Box from "@mui/material/Box";
 
 const axios = require("axios");
 
@@ -382,7 +383,7 @@ const Tasks = (props) => {
   }
 
   return (
-    <div>
+    <Box>
       <NewTask
         onAddTask={addTaskHandler}
         types={types}
@@ -418,7 +419,7 @@ const Tasks = (props) => {
           {message.content}
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 };
 

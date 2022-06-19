@@ -5,10 +5,13 @@ import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import Box from "@mui/material/Box";
 
 const App = (props) => {
   return (
     <BrowserRouter {...props}>
+      <Box sx={{ minHeight: "calc(100vh - 37.91px)" }}>
       <Navbar />
       <Switch>
         <Route path="/login">
@@ -34,6 +37,8 @@ const App = (props) => {
           <NotFound />
         </Route>
       </Switch>
+      </Box>
+      <Footer />
     </BrowserRouter>
   );
 };
