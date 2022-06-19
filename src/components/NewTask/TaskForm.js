@@ -33,7 +33,7 @@ const TaskForm = (props) => {
   };
 
   const saveTypeDataHandler = () => {
-    const enteredType = getValues("taskType").trim()
+    const enteredType = getValues("taskType").trim();
 
     // Do not submit if type already exists
     if (options.includes(enteredType)) {
@@ -61,6 +61,7 @@ const TaskForm = (props) => {
       autoComplete="off"
       onSubmit={handleSubmit(submitHandler)}
       noValidate
+      sx={{px: 1}}
     >
       <Grid item xs={12} md={8}>
         <Stack direction="row" spacing={0}>
