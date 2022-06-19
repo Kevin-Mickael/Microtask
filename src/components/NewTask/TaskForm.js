@@ -33,8 +33,15 @@ const TaskForm = (props) => {
   };
 
   const saveTypeDataHandler = () => {
+    const enteredType = getValues("taskType").trim()
+
+    // Do not submit if type already exists
+    if (options.includes(enteredType)) {
+      return;
+    }
+
     const typeData = {
-      type: getValues("taskType"),
+      type: enteredType,
     };
     props.onAddType(typeData);
   };
