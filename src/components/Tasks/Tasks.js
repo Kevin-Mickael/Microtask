@@ -263,19 +263,15 @@ const Tasks = (props) => {
         },
       })
       .then((response) => {
-        setTypes((prevTypes) => {
-          const newTypes = [
-            {
-              id: response.data._id,
-              type: response.data.type,
-            },
-            ...prevTypes,
-          ];
-          // Sort by string
-          newTypes.sort((a, b) => (a.type > b.type ? 1 : -1));
+        const newtype = {
+          id: response.data._id,
+          type: response.data.type,
+        };
 
-          return newTypes;
-        });
+        const newTypes = types.concat(newtype);
+        // Sort by string
+        newTypes.sort((a, b) => (a.type > b.type ? 1 : -1));
+        setTypes(newTypes);
 
         setMessage({
           open: true,

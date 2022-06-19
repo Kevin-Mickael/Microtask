@@ -14,11 +14,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
+import { useSelector } from "react-redux";
 
 // Add leading zero
 const zeroPad = (num, places) => String(num).padStart(places, "0");
 
 const TaskItem = (props) => {
+  const authUser = useSelector((state) => state.auth);
+  // Should be disabled if admin browses others' tasks
+  const isDisabled =
+    authUser.username === "admin" && props.selectedUser !== authUser.userid;
+
   const [edit, setEdit] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -67,26 +73,28 @@ const TaskItem = (props) => {
               props.count
             }`}
           </Typography>
-          <Tooltip title="Edit task">
-            <IconButton
-              color="warning"
-              aria-label="Edit task"
-              component="button"
-              onClick={editHandler}
-            >
+          <IconButton
+            disabled={isDisabled}
+            color="warning"
+            aria-label="Edit task"
+            component="button"
+            onClick={editHandler}
+          >
+            <Tooltip title="Edit task">
               <EditOutlinedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete task">
-            <IconButton
-              color="error"
-              aria-label="Delete task"
-              component="button"
-              onClick={handleClickOpen}
-            >
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            disabled={isDisabled}
+            color="error"
+            aria-label="Delete task"
+            component="button"
+            onClick={handleClickOpen}
+          >
+            <Tooltip title="Delete task">
               <DeleteOutlineOutlinedIcon />
-            </IconButton>
-          </Tooltip>
+            </Tooltip>
+          </IconButton>
           <Dialog
             open={open}
             onClose={handleClose}

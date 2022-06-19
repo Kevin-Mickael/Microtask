@@ -18,7 +18,7 @@ const TasksList = (props) => {
     setUser(event.target.value);
     props.onSelectUser(event.target.value);
   };
-
+  
   return (
     <div>
       {authUser.username === "admin" && (
@@ -34,7 +34,10 @@ const TasksList = (props) => {
                 onChange={handleChange}
               >
                 {props.users.map((user) => (
-                  <MenuItem value={user.id} key={user.id}>
+                  <MenuItem
+                    value={user.id}
+                    key={user.id}
+                  >
                     {user.username}
                   </MenuItem>
                 ))}
@@ -62,6 +65,7 @@ const TasksList = (props) => {
               onDelete={props.onDeleteItem}
               onUpdate={props.onUpdateItem}
               types={props.types}
+              selectedUser={user}
             />
           ))}
         </List>

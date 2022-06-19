@@ -79,7 +79,7 @@ const Login = () => {
             }}
           >
             <Typography variant="h1" component="div" sx={{ m: 4 }}>
-            Tasks tracking made simple.
+            Task tracking made simple.
             </Typography>
             <img
               src={taskImage}

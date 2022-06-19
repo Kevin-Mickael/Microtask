@@ -42,7 +42,7 @@ const TaskForm = (props) => {
   };
 
   const deleteTypeDataHandler = () => {
-    props.onDeleteTypeData(getValues("taskType"));
+    props.onDeleteTypeData(getValues("taskType").trim());
     setValue("taskType", "");
   };
 
