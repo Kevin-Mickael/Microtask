@@ -7,10 +7,10 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "100vw",
         backgroundColor: grey[100],
         textAlign: "center",
-        p: 1,
+        py: 1,
       }}
     >
       <Typography variant="caption" color="primary">
