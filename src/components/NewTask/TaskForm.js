@@ -46,7 +46,10 @@ const TaskForm = (props) => {
     setValue("taskType", "");
   };
 
-  const options = props.types.map((option) => option.type);
+  let options = [];
+  if (props.types !== undefined) {
+    options = props.types.map((option) => option.type);
+  }
 
   return (
     <Grid
@@ -56,7 +59,7 @@ const TaskForm = (props) => {
       autoComplete="off"
       onSubmit={handleSubmit(submitHandler)}
       noValidate
-      sx={{px: 1}}
+      sx={{ px: 1 }}
     >
       <Grid item xs={12} md={8}>
         <Stack direction="row" spacing={0}>
@@ -87,7 +90,8 @@ const TaskForm = (props) => {
                 fullWidth
                 sx={{ m: 1 }}
                 freeSolo
-                options={options || []}
+                options={options}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField
                     {...params}
