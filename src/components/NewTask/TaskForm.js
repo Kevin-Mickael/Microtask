@@ -84,7 +84,7 @@ const TaskForm = (props) => {
                 fullWidth
                 sx={{ m: 1 }}
                 freeSolo
-                options={options}
+                options={options || []}
                 renderInput={(params) => (
                   <TextField
                     {...params}

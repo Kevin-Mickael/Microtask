@@ -75,7 +75,7 @@ const EditTaskForm = (props) => {
               fullWidth
               freeSolo
               size="small"
-              options={options}
+              options={options || []}
               renderInput={(params) => (
                 <TextField
                   {...params}
