@@ -3,6 +3,7 @@ import moment from "moment";
 import NewTask from "../NewTask/NewTask";
 import TasksList from "./TasksList";
 import TasksSummary from "./TasksSummary";
+import TasksTimer from "./TasksTimer";
 import config from "../../config";
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
@@ -21,6 +22,9 @@ const Tasks = (props) => {
   const [tasks, setTasks] = useState([]);
   const [types, setTypes] = useState([]);
   const [users, setUsers] = useState([]);
+  const [submittedMinute, setSubmittedMinute] = useState(0);
+  const [submittedSecond, setSubmittedSecond] = useState(0);
+  const [submittedId, setSubmittedId] = useState("");
   const [selectedUser, setSelectedUser] = useState(authUser.userid);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -214,6 +218,11 @@ const Tasks = (props) => {
             ...prevTasks,
           ];
         });
+
+        // Pass data to timer
+        setSubmittedMinute(parseInt(response.data.minute));
+        setSubmittedSecond(parseInt(response.data.second));
+        setSubmittedId(response.data._id);
 
         setMessage({
           open: true,
@@ -465,6 +474,7 @@ const Tasks = (props) => {
         onAddType={addTypeHandler}
         onDeleteType={deleteTypeHandler}
       />
+      <TasksTimer submittedMinute={submittedMinute} submittedSecond={submittedSecond} submittedId={submittedId} />
       <TasksSummary
         items={filteredTasks}
         onDeleteAll={deleteAllHandler}
