@@ -68,10 +68,9 @@ const Tasks = (props) => {
   const filteredTasks = tasks.filter((task) => {
     // Convert input dates to UTC as dates in database are stored as UTC dates
     const offset = moment().utcOffset();
-    const start = moment(filteredStartDate, "MM/DD/YYYY").utcOffset(offset);
-    const end = moment(filteredEndDate, "MM/DD/YYYY")
-      .utcOffset(offset)
-      .add(1, "days");
+    const start = moment(filteredStartDate).utcOffset(offset);
+    console.log(start);
+    const end = moment(filteredEndDate).utcOffset(offset).add(1, "days");
 
     // Check if user is admin
     if (authUser.username === "admin") {
@@ -474,7 +473,11 @@ const Tasks = (props) => {
         onAddType={addTypeHandler}
         onDeleteType={deleteTypeHandler}
       />
-      <TasksTimer submittedMinute={submittedMinute} submittedSecond={submittedSecond} submittedId={submittedId} />
+      <TasksTimer
+        submittedMinute={submittedMinute}
+        submittedSecond={submittedSecond}
+        submittedId={submittedId}
+      />
       <TasksSummary
         items={filteredTasks}
         onDeleteAll={deleteAllHandler}

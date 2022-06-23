@@ -18,9 +18,8 @@ import Typography from "@mui/material/Typography";
 
 const TasksTimer = (props) => {
   const [checked, setChecked] = useState(true);
-  const [timer, isTargetAchieved] = useTimer({
+  const [timer] = useTimer({
     countdown: true,
-    updateWhenTargetAchieved: true,
   });
   const {
     handleSubmit,
@@ -43,6 +42,11 @@ const TasksTimer = (props) => {
           seconds: props.submittedSecond,
         },
       });
+
+      timer.addEventListener("targetAchieved", () => {
+        console.log("Task Done");
+        // trigger notification
+      });
     }
   }, [
     timer,
@@ -51,32 +55,6 @@ const TasksTimer = (props) => {
     props.submittedSecond,
     props.submittedId,
   ]);
-
-  const showNotification = () => {
-    const notification = new Notification("Time is up", {
-      body: "It is time for another task",
-    });
-
-    notification.addEventListener("click", () => {
-      notification.close();
-    });
-  };
-
-  const notifyUser = () => {
-    // https://developer.mozilla.org/en-US/docs/Web/API/notification
-
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-      showNotification();
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
-          showNotification();
-        }
-      });
-    }
-  };
 
   const startTimer = () => {
     timer.start();
@@ -105,10 +83,6 @@ const TasksTimer = (props) => {
       },
     });
   };
-
-  if (isTargetAchieved) {
-    notifyUser();
-  }
 
   return (
     <>
@@ -251,17 +225,17 @@ const TasksTimer = (props) => {
               />
             )}
           />
-          <Tooltip title="Confirm time">
-            <IconButton
-              color="success"
-              aria-label="Confirm time"
-              component="button"
-              type="submit"
-              disabled={checked}
-            >
+          <IconButton
+            color="success"
+            aria-label="Confirm time"
+            component="button"
+            type="submit"
+            disabled={checked}
+          >
+            <Tooltip title="Confirm time">
               <TimerOutlinedIcon />
-            </IconButton>
-          </Tooltip>
+            </Tooltip>
+          </IconButton>
           <FormGroup sx={{ display: "inline-block" }}>
             <FormControlLabel
               control={<Switch checked={checked} onChange={handleChange} />}
