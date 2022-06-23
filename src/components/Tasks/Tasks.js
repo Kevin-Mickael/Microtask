@@ -69,7 +69,6 @@ const Tasks = (props) => {
     // Convert input dates to UTC as dates in database are stored as UTC dates
     const offset = moment().utcOffset();
     const start = moment(filteredStartDate).utcOffset(offset);
-    console.log(start);
     const end = moment(filteredEndDate).utcOffset(offset).add(1, "days");
 
     // Check if user is admin
