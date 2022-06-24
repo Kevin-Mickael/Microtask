@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import useTimer from "easytimer-react-hook";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
@@ -25,16 +25,25 @@ const TasksTimer = (props) => {
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm();
+
+  const clearTimer = useCallback(() => {
+    timer.stop();
+    timer.removeAllEventListeners();
+  }, [timer]);
+
+  const notifyUser = useCallback(() => {
+    console.log("Task Done");
+  }, []);
 
   useEffect(() => {
     if (
       checked &&
       (props.submittedMinute !== 0 || props.submittedSecond !== 0)
     ) {
-      if (timer.isRunning) {
-        timer.stop();
-      }
+      clearTimer();
+
       timer.start({
         countdown: true,
         startValues: {
@@ -44,8 +53,7 @@ const TasksTimer = (props) => {
       });
 
       timer.addEventListener("targetAchieved", () => {
-        console.log("Task Done");
-        // trigger notification
+        notifyUser();
       });
     }
   }, [
@@ -54,33 +62,65 @@ const TasksTimer = (props) => {
     props.submittedMinute,
     props.submittedSecond,
     props.submittedId,
+    clearTimer,
+    notifyUser,
   ]);
 
   const startTimer = () => {
-    timer.start();
-  };
-  const pauseTimer = () => {
-    timer.pause();
-  };
-  const stopTimer = () => {
-    timer.stop();
-  };
-  const resetTimer = () => {
-    timer.reset();
+    if (
+      checked &&
+      (props.submittedMinute !== 0 || props.submittedSecond !== 0)
+    ) {
+      clearTimer();
+      timer.start({
+        countdown: true,
+        startValues: {
+          minutes: props.submittedMinute,
+          seconds: props.submittedSecond,
+        },
+      });
+      timer.addEventListener("targetAchieved", () => {
+        notifyUser();
+      });
+    } else if (
+      getValues("timerMinute") !== 0 ||
+      getValues("timerSecond") !== 0
+    ) {
+      clearTimer();
+      timer.start({
+        countdown: true,
+        startValues: {
+          minutes: getValues("timerMinute"),
+          seconds: getValues("timerSecond"),
+        },
+      });
+      timer.addEventListener("targetAchieved", () => {
+        notifyUser();
+      });
+    }
   };
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
 
+  useEffect(() => {
+    if (!checked) {
+      clearTimer();
+    }
+  }, [checked, clearTimer]);
+
   const submitHandler = (data) => {
-    timer.stop();
+    clearTimer();
     timer.start({
       countdown: true,
       startValues: {
         minutes: parseInt(data.timerMinute),
         seconds: parseInt(data.timerSecond),
       },
+    });
+    timer.addEventListener("targetAchieved", () => {
+      notifyUser();
     });
   };
 
@@ -111,7 +151,7 @@ const TasksTimer = (props) => {
             color="warning"
             aria-label="Pause timer"
             component="button"
-            onClick={pauseTimer}
+            onClick={timer.pause}
             sx={{ p: 0 }}
           >
             <Tooltip title="Pause timer">
@@ -122,7 +162,7 @@ const TasksTimer = (props) => {
             color="error"
             aria-label="Stop timer"
             component="button"
-            onClick={stopTimer}
+            onClick={timer.stop}
             sx={{ p: 0 }}
           >
             <Tooltip title="Stop timer">
@@ -133,7 +173,7 @@ const TasksTimer = (props) => {
             color="secondary"
             aria-label="Reset timer"
             component="button"
-            onClick={resetTimer}
+            onClick={timer.reset}
             sx={{ p: 0 }}
           >
             <Tooltip title="Reset timer">
@@ -236,7 +276,7 @@ const TasksTimer = (props) => {
               <TimerOutlinedIcon />
             </Tooltip>
           </IconButton>
-          <FormGroup sx={{ display: "inline-block" }}>
+          <FormGroup sx={{ display: "inline-block", px: 1 }}>
             <FormControlLabel
               control={<Switch checked={checked} onChange={handleChange} />}
               label="Autostart"
