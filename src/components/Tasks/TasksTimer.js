@@ -10,11 +10,12 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useForm, Controller } from "react-hook-form";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
-import Stack from "@mui/material/Stack";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 const TasksTimer = (props) => {
   const [checked, setChecked] = useState(true);
@@ -28,13 +29,18 @@ const TasksTimer = (props) => {
     getValues,
   } = useForm();
 
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const clearTimer = useCallback(() => {
     timer.stop();
     timer.removeAllEventListeners();
   }, [timer]);
 
   const notifyUser = useCallback(() => {
-    console.log("Task Done");
+    setOpen(true);
   }, []);
 
   useEffect(() => {
@@ -126,16 +132,13 @@ const TasksTimer = (props) => {
 
   return (
     <>
-      <Stack
-        direction="row"
+      <Box
+        display="flex"
         justifyContent="center"
         alignItems="center"
-        spacing={2}
+        sx={{ flexDirection: { xs: "column", md: "row" } }}
       >
         <Box display="flex" justifyContent="center" alignItems="center">
-          <Typography variant="h2" sx={{ display: "inline-block" }}>
-            {timer.getTimeValues().toString(["minutes", "seconds"])}
-          </Typography>
           <IconButton
             color="success"
             aria-label="Start timer"
@@ -180,12 +183,18 @@ const TasksTimer = (props) => {
               <RestartAltIcon />
             </Tooltip>
           </IconButton>
+          <Typography variant="h2" sx={{ display: "inline-block", px: 2 }}>
+            {timer.getTimeValues().toString(["minutes", "seconds"])}
+          </Typography>
         </Box>
         <Box
           component="form"
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit(submitHandler)}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
         >
           <Controller
             name="timerMinute"
@@ -267,12 +276,12 @@ const TasksTimer = (props) => {
           />
           <IconButton
             color="success"
-            aria-label="Confirm time"
+            aria-label="Set time"
             component="button"
             type="submit"
             disabled={checked}
           >
-            <Tooltip title="Confirm time">
+            <Tooltip title="Set time">
               <TimerOutlinedIcon />
             </Tooltip>
           </IconButton>
@@ -283,7 +292,22 @@ const TasksTimer = (props) => {
             />
           </FormGroup>
         </Box>
-      </Stack>
+      </Box>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClick={handleClose}
+      >
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <NotificationsActiveIcon fontSize="large" />
+          <Typography variant="h2">Time for another task!</Typography>
+        </Box>
+      </Backdrop>
     </>
   );
 };
