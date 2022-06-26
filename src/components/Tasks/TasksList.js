@@ -9,16 +9,23 @@ import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
+import Pagination from "@mui/material/Pagination";
+import usePagination from "../../hooks/usePagination";
+import Box from "@mui/material/Box";
+
+const ITEMS_PER_PAGE = 10;
 
 const TasksList = (props) => {
   const authUser = useSelector((state) => state.auth);
   const [user, setUser] = React.useState("");
+  const { currentPage, getCurrentData, setCurrentPage, pageCount } =
+    usePagination(props.items, ITEMS_PER_PAGE);
 
   const handleChange = (event) => {
     setUser(event.target.value);
     props.onSelectUser(event.target.value);
   };
-  
+
   return (
     <div>
       {authUser.username === "admin" && (
@@ -34,10 +41,7 @@ const TasksList = (props) => {
                 onChange={handleChange}
               >
                 {props.users.map((user) => (
-                  <MenuItem
-                    value={user.id}
-                    key={user.id}
-                  >
+                  <MenuItem value={user.id} key={user.id}>
                     {user.username}
                   </MenuItem>
                 ))}
@@ -52,23 +56,33 @@ const TasksList = (props) => {
           {user !== "" && "No tasks found."}
         </Typography>
       ) : (
-        <List>
-          {props.items.map((task) => (
-            <TaskItem
-              key={task.id}
-              id={task.id}
-              date={task.date}
-              type={task.type}
-              minute={task.minute}
-              second={task.second}
-              count={task.count}
-              onDelete={props.onDeleteItem}
-              onUpdate={props.onUpdateItem}
-              types={props.types}
-              selectedUser={user}
-            />
-          ))}
-        </List>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <List sx={{ width: "100%" }}>
+            {getCurrentData().map((task) => (
+              <TaskItem
+                key={task.id}
+                id={task.id}
+                date={task.date}
+                type={task.type}
+                minute={task.minute}
+                second={task.second}
+                count={task.count}
+                onDelete={props.onDeleteItem}
+                onUpdate={props.onUpdateItem}
+                types={props.types}
+                selectedUser={user}
+              />
+            ))}
+          </List>
+          <Pagination
+            onChange={(_, newPage) => setCurrentPage(newPage)}
+            page={currentPage}
+            count={pageCount}
+            variant="outlined"
+            shape="rounded"
+            sx={{ py: 2 }}
+          />
+        </Box>
       )}
     </div>
   );
