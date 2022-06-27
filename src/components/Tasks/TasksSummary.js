@@ -49,8 +49,7 @@ const TasksSummary = (props) => {
 
   // Delete all should be disabled if admin browses others' tasks
   const isDisabled =
-    authUser.username === "admin" &&
-    props.selectedUser !== authUser.userid;
+    authUser.username === "admin" && props.selectedUser !== authUser.userid;
 
   return (
     <>
@@ -111,10 +110,12 @@ const TasksSummary = (props) => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={deleteHandler} autoFocus>
+                  <Button onClick={handleClose} color="warning">
+                    Cancel
+                  </Button>
+                  <Button onClick={deleteHandler} autoFocus color="warning">
                     Yes
                   </Button>
-                  <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
               </Dialog>
             </Stack>

@@ -117,10 +117,12 @@ const TaskItem = (props) => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={deleteHandler} autoFocus>
+              <Button onClick={handleClose} color="warning">
+                Cancel
+              </Button>
+              <Button onClick={deleteHandler} autoFocus color="warning">
                 Yes
               </Button>
-              <Button onClick={handleClose}>Cancel</Button>
             </DialogActions>
           </Dialog>
         </>
