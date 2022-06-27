@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useTheme } from '@mui/material/styles';
+
 
 ChartJS.register(
   CategoryScale,
@@ -20,32 +22,39 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-  },
-  scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-    },
-    y: {
-      grid: {
-        display: false,
-      },
-    },
-  },
-};
+
 
 const Chart = (props) => {
+  const theme = useTheme();
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+          borderColor: theme.palette.primary.main,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+          borderColor: theme.palette.primary.main,
+        },
+      },
+    },
+  };
+
+
   // Sort tasks by date
   // .slice(0) copies the array
   const sortedTasks = props.items.slice(0).sort((a, b) => {
@@ -102,7 +111,7 @@ const Chart = (props) => {
 
           return sumHours;
         }),
-        backgroundColor: "#827717",
+        backgroundColor: theme.palette.primary.main,
         maxBarThickness: 100,
         borderRadius: 3,
       },

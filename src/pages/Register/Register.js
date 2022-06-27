@@ -56,10 +56,14 @@ const Register = () => {
 
   return (
     <>
-      {message && <Alert severity={message.severity}>{message.data}</Alert>}
+      {message && (
+        <Alert severity={message.severity} sx={{ borderRadius: 0 }}>
+          {message.data}
+        </Alert>
+      )}
 
       <Grid container spacing={0}>
-        <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={5}>
           <Box
             component="form"
             onSubmit={handleSubmit(submitHandler)}
@@ -183,7 +187,7 @@ const Register = () => {
         </Grid>
         <Grid
           item
-          md={4}
+          md={7}
           sx={{
             display: { xs: "none", md: "block" },
           }}

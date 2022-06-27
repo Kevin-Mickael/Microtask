@@ -59,7 +59,11 @@ const Login = () => {
 
   return (
     <>
-      {message && <Alert severity={message.severity}>{message.data}</Alert>}
+      {message && (
+        <Alert severity={message.severity} sx={{ borderRadius: 0 }}>
+          {message.data}
+        </Alert>
+      )}
 
       <Grid container spacing={0}>
         <Grid
@@ -79,7 +83,7 @@ const Login = () => {
             }}
           >
             <Typography variant="h1" component="div" sx={{ m: 4 }}>
-            Task tracking made simple.
+              Task tracking made simple.
             </Typography>
             <img
               src={taskImage}

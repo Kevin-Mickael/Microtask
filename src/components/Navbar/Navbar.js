@@ -10,20 +10,25 @@ import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
-import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '../../store/auth';
-
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../../store/auth";
+import { useTheme } from "@mui/material/styles";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 const Navbar = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth);
+  const theme = useTheme();
 
   const logoutHandler = () => {
     localStorage.clear();
     dispatch(authActions.logout());
     history.push("/login");
   };
+
+  console.log(theme.palette.mode);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -47,6 +52,33 @@ const Navbar = (props) => {
               Microtask Counter
             </Link>
           </Typography>
+
+          <Tooltip
+            title={
+              theme.palette.mode === "dark"
+                ? "Switch to light mode"
+                : "Switch to dark mode"
+            }
+          >
+            <IconButton
+              color="inherit"
+              aria-label={
+                theme.palette.mode === "dark"
+                  ? "Switch to light mode"
+                  : "Switch to dark mode"
+              }
+              component="button"
+              onClick={props.colorMode.toggleColorMode}
+              sx={{ mx: 2 }}
+            >
+              {theme.palette.mode === "dark" ? (
+                <LightModeIcon />
+              ) : (
+                <DarkModeIcon />
+              )}
+            </IconButton>
+          </Tooltip>
+
           {authUser.username !== "" && (
             <Typography variant="h6" color="inherit" component="div">
               {authUser.username}

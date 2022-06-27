@@ -116,7 +116,7 @@ const TaskForm = (props) => {
               onClick={saveTypeDataHandler}
               tabIndex={-1}
             >
-              <BookmarkAddIcon fontSize="large" sx={{ p: 1 }} />
+              <BookmarkAddIcon fontSize="large" sx={{ mx: 1 }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete task type">
@@ -127,7 +127,7 @@ const TaskForm = (props) => {
               onClick={deleteTypeDataHandler}
               tabIndex={-1}
             >
-              <BookmarkRemoveIcon fontSize="large" sx={{ p: 1 }} />
+              <BookmarkRemoveIcon fontSize="large" sx={{ mx: 1 }} />
             </IconButton>
           </Tooltip>
         </Stack>
@@ -252,7 +252,7 @@ const TaskForm = (props) => {
               component="button"
               type="submit"
             >
-              <AddCircleOutlinedIcon sx={{ p: 1 }} fontSize="large" />
+              <AddCircleOutlinedIcon sx={{ mx: 1 }} fontSize="large" />
             </IconButton>
           </Tooltip>
         </Box>
