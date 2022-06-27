@@ -55,7 +55,7 @@ const getDesignTokens = (mode) => ({
 
 const App = (props) => {
   const [mode, setMode] = useState(
-    localStorage.getItem("isDark") ? "dark" : "light"
+    localStorage.getItem("isDark") === "true" ? "dark" : "light"
   );
   const colorMode = useMemo(
     () => ({
@@ -63,10 +63,10 @@ const App = (props) => {
       toggleColorMode: () => {
         setMode((prevMode) => {
           if (prevMode === "light") {
-            localStorage.setItem("isDark", true);
+            localStorage.setItem("isDark", "true");
             return "dark";
           } else {
-            localStorage.setItem("isDark", false);
+            localStorage.setItem("isDark", "false");
             return "light";
           }
         });

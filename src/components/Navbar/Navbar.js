@@ -28,8 +28,6 @@ const Navbar = (props) => {
     history.push("/login");
   };
 
-  console.log(theme.palette.mode);
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ boxShadow: 0 }}>
