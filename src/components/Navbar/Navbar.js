@@ -23,7 +23,10 @@ const Navbar = (props) => {
   const theme = useTheme();
 
   const logoutHandler = () => {
+    // Clear local storage except for dark mode
+    const isDark = localStorage.getItem("isDark");
     localStorage.clear();
+    localStorage.setItem("isDark", isDark);
     dispatch(authActions.logout());
     history.push("/login");
   };
