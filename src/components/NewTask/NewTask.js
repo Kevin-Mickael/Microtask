@@ -12,7 +12,7 @@ const NewTask = (props) => {
 
   return (
     <div>
-      <TaskForm onSaveTaskData={saveTaskDataHandler} types={props.types} onAddType={props.onAddType} onDeleteTypeData={props.onDeleteType} />
+      <TaskForm onSaveTaskData={saveTaskDataHandler} types={props.types} onAddType={props.onAddType} onDeleteTypeData={props.onDeleteType} formLoading={props.formLoading} />
     </div>
   );
 };

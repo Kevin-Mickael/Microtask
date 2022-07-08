@@ -27,6 +27,7 @@ const Tasks = (props) => {
   const [submittedId, setSubmittedId] = useState("");
   const [selectedUser, setSelectedUser] = useState(authUser.userid);
   const [isLoading, setIsLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState({
     open: false,
@@ -68,8 +69,12 @@ const Tasks = (props) => {
   const filteredTasks = tasks.filter((task) => {
     // Convert input dates to UTC as dates in database are stored as UTC dates
     const offset = moment().utcOffset();
-    const start = moment(new Date(Date.parse(filteredStartDate))).utcOffset(offset);
-    const end = moment(new Date(Date.parse(filteredEndDate))).utcOffset(offset).add(1, "days");
+    const start = moment(new Date(Date.parse(filteredStartDate))).utcOffset(
+      offset
+    );
+    const end = moment(new Date(Date.parse(filteredEndDate)))
+      .utcOffset(offset)
+      .add(1, "days");
 
     // Check if user is admin
     if (authUser.username === "admin") {
@@ -186,7 +191,6 @@ const Tasks = (props) => {
         setError(error.message);
         setIsLoading(false);
       });
-
   }, []);
 
   useEffect(() => {
@@ -195,6 +199,8 @@ const Tasks = (props) => {
   }, [getDataHandler, getUsersHandler]);
 
   const addTaskHandler = (task) => {
+    setFormLoading(true);
+
     axios
       .post(`${config.baseUrl}/tasks`, task, {
         headers: {
@@ -228,6 +234,7 @@ const Tasks = (props) => {
           severity: "success",
           content: "New task added.",
         });
+        setFormLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -236,6 +243,7 @@ const Tasks = (props) => {
           severity: "error",
           content: "Something went wrong.",
         });
+        setFormLoading(false);
       });
   };
 
@@ -472,6 +480,7 @@ const Tasks = (props) => {
         types={types}
         onAddType={addTypeHandler}
         onDeleteType={deleteTypeHandler}
+        formLoading={formLoading}
       />
       <TasksTimer
         submittedMinute={submittedMinute}

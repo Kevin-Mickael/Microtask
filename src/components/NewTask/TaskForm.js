@@ -28,7 +28,6 @@ const TaskForm = (props) => {
       second: data.taskSecond,
       count: data.taskCount,
     };
-
     props.onSaveTaskData(taskData);
   };
 
@@ -251,6 +250,7 @@ const TaskForm = (props) => {
               aria-label="Add task"
               component="button"
               type="submit"
+              disabled={props.formLoading}
             >
               <AddCircleOutlinedIcon sx={{ mx: 1 }} fontSize="large" />
             </IconButton>
