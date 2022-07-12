@@ -33,6 +33,7 @@ const Tasks = (props) => {
     open: false,
     severity: "success",
     content: "",
+    duration: 2000,
   });
 
   const handleClose = (event, reason) => {
@@ -40,7 +41,12 @@ const Tasks = (props) => {
       return;
     }
 
-    setMessage({ open: false, severity: "success", content: "" });
+    setMessage({
+      open: false,
+      severity: "success",
+      content: "",
+      duration: 2000,
+    });
   };
 
   // Local date
@@ -118,12 +124,19 @@ const Tasks = (props) => {
             open: true,
             severity: "error",
             content: "Something went wrong.",
+            duration: 2000,
           });
         });
     }
   }, [authUser.username]);
 
   const getDataHandler = useCallback(() => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
     setIsLoading(true);
     setError(null);
 
@@ -184,21 +197,39 @@ const Tasks = (props) => {
 
           setTypes(loadedTypes);
           setIsLoading(false);
+          setMessage({
+            open: false,
+            severity: "info",
+            content: "",
+            duration: 2000,
+          });
         })
       )
       .catch((error) => {
         console.log(error.message);
         setError(error.message);
         setIsLoading(false);
+        setMessage({
+          open: false,
+          severity: "info",
+          content: "",
+          duration: 2000,
+        });
       });
   }, []);
 
   useEffect(() => {
-    getUsersHandler();
     getDataHandler();
+    getUsersHandler();
   }, [getDataHandler, getUsersHandler]);
 
   const addTaskHandler = (task) => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
     setFormLoading(true);
 
     axios
@@ -228,11 +259,11 @@ const Tasks = (props) => {
         setSubmittedMinute(parseInt(response.data.minute));
         setSubmittedSecond(parseInt(response.data.second));
         setSubmittedId(response.data._id);
-
         setMessage({
           open: true,
           severity: "success",
           content: "New task added.",
+          duration: 2000,
         });
         setFormLoading(false);
       })
@@ -242,18 +273,27 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
         setFormLoading(false);
       });
   };
 
   const addTypeHandler = (type) => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
+
     // Do not submit if type is "" or null
     if (type.type === "" || type.type === null) {
       setMessage({
         open: true,
         severity: "error",
         content: "Please input task type.",
+        duration: 2000,
       });
       return;
     }
@@ -267,6 +307,7 @@ const Tasks = (props) => {
         open: true,
         severity: "error",
         content: "Type already exists.",
+        duration: 2000,
       });
       return;
     }
@@ -293,6 +334,7 @@ const Tasks = (props) => {
           open: true,
           severity: "success",
           content: "New task type added.",
+          duration: 2000,
         });
       })
       .catch((error) => {
@@ -301,11 +343,19 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
       });
   };
 
   const deleteTaskHandler = (taskId) => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
+
     axios
       .delete(`${config.baseUrl}/tasks/${taskId}`, {
         headers: {
@@ -323,6 +373,7 @@ const Tasks = (props) => {
           open: true,
           severity: "success",
           content: "Task deleted.",
+          duration: 2000,
         });
       })
       .catch((error) => {
@@ -331,17 +382,26 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
       });
   };
 
   const deleteTypeHandler = (type) => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
+
     // Do not submit if type is "" or null
     if (type === "" || type === null) {
       setMessage({
         open: true,
         severity: "error",
         content: "Please input task type.",
+        duration: 2000,
       });
       return;
     }
@@ -366,6 +426,7 @@ const Tasks = (props) => {
           open: true,
           severity: "success",
           content: "Task type deleted.",
+          duration: 2000,
         });
       })
       .catch((error) => {
@@ -374,11 +435,19 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
       });
   };
 
   const updateTaskHandler = (taskId, taskData) => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
+
     axios
       .put(`${config.baseUrl}/tasks/${taskId}`, taskData, {
         headers: {
@@ -402,6 +471,7 @@ const Tasks = (props) => {
           open: true,
           severity: "success",
           content: "Task updated.",
+          duration: 2000,
         });
       })
       .catch((error) => {
@@ -410,11 +480,19 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
       });
   };
 
   const deleteAllHandler = () => {
+    setMessage({
+      open: true,
+      severity: "info",
+      content: "Loading...",
+      duration: null,
+    });
+
     axios
       .delete(`${config.baseUrl}/tasks/`, {
         headers: {
@@ -434,6 +512,7 @@ const Tasks = (props) => {
           open: true,
           severity: "success",
           content: "All tasks have been deleted.",
+          duration: 2000,
         });
       })
       .catch((error) => {
@@ -442,6 +521,7 @@ const Tasks = (props) => {
           open: true,
           severity: "error",
           content: "Something went wrong.",
+          duration: 2000,
         });
       });
   };
@@ -501,7 +581,7 @@ const Tasks = (props) => {
 
       <Snackbar
         open={message.open}
-        autoHideDuration={2000}
+        autoHideDuration={message.duration}
         onClose={handleClose}
         anchorOrigin={{
           vertical: "top",
